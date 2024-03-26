@@ -2,6 +2,7 @@ import SpaIcon from '@mui/icons-material/Spa';
 import { TerpenEnum } from '../types/Terpen';
 
 export const switchTerpenIcon = (terpenType: TerpenEnum) => {
+  // eslint-disable-next-line default-case
   switch (terpenType) {
   case TerpenEnum.LIMONEN:
     return (

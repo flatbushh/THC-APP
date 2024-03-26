@@ -111,7 +111,7 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
     /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
     konkretnego produktu jest rowny terpenowi, ktory podalismy jako argument tej funkcji. Jesli tak to go zwracamy, jesli nie
     to jest usuwany z arraya */
-    setProducts(newList); // DLACZEGO TU KORZYSTAMY Z SETPRODUCTS SKORO NIE MA TU USESTATE W TYM PLIKU ?
+    setProducts(newList); // DLACZEGO TU KORZYSTAMY Z SETPRODUCTS SKORO NIE MA TU USESTATE W TYM PLIKU ? PROPS
     /* podajemy nowa liste produktow do funkcji setProducts, ktora jest przekazywana jako props do tego
     komponentu, a oryginalnie jest wzieta z useState wewnatrz ProductsList. Robimy to po to, zeby spelniac zasady
     modyfikacji propsow. (one way data flow) NIE ROZUMIEM */

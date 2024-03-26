@@ -105,9 +105,9 @@ export const ProductsList:FC = () => {
   );
 };
 
-/* PRACA DOMOWA
+/* PRACA DOMOWA -- zostaje ta sama
 1. Przeczytac o fomularzach https://kursjs.pl/kurs/formularze/formularze
 2. Zapoznac sie z dokumentacja react-hook-form https://react-hook-form.com/get-started
-3. Stworzyc ekran dodawania produktu (bez wysylania, sam formularz)
+3. Stworzyc ekran dodawania produktu (bez wysylania, sam formularz) *
 4. Stworzyc repozytorium pod frontend i dodac do niego to co mamy do tej pory
 */
