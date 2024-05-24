@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Grid, styled } from '@mui/material';
+import axios from 'axios';
 import { MuiCard } from './Card';
 import image2 from '../fotki/aurora201.png';
 import image3 from '../fotki/aurorazielona.png';
@@ -12,17 +13,7 @@ import image9 from '../fotki/pinkkush.png';
 import { TerpenEnum } from '../types/Terpen';
 import { Container } from './Container';
 import { ProductDrawer } from './Drawer';
-
-export const STATIC_PRODUCTS = [
-  { id: 1, producentName: 'Aurora', strainName: 'L.A. Confidential', genetics: 'indica', thcLevel: 22, cbdLevel: 1, image: image2, terpen: TerpenEnum.LIMONEN },
-  { id: 2, producentName: 'Aurora', strainName: 'Equiposa', genetics: 'sativa', thcLevel: 22, cbdLevel: 5, image: image3, terpen: TerpenEnum.CARIOPHILEN },
-  { id: 3, producentName: 'Aurora', strainName: 'Ghost Train Haze', genetics: 'sativa', thcLevel: 20, cbdLevel: 2, image: image4, terpen: TerpenEnum.MIRCEN },
-  { id: 4, producentName: 'Spectrum', strainName: 'Lemon Skunk', genetics: 'sativa', thcLevel: 17, cbdLevel: 5, image: image6, terpen: TerpenEnum.LIMONEN },
-  { id: 5, producentName: 'Canopy Growth', strainName: 'Master Kush', genetics: 'sativa', thcLevel: 20, cbdLevel: 5, image: image7, terpen: TerpenEnum.LIMONEN },
-  { id: 6, producentName: 'Canopy Growth', strainName: 'Mango', genetics: 'Indica', thcLevel: 18, cbdLevel: 1, image: image8, terpen: TerpenEnum.LIMONEN },
-  { id: 7, producentName: 'Aurora', strainName: 'Pink Kush', genetics: 'Indica', thcLevel: 18, cbdLevel: 1, image: image9, terpen: TerpenEnum.LIMONEN },
-  { id: 7, producentName: 'Four20Pharma', strainName: 'Gorilla Glue', genetics: 'Indica', thcLevel: 18, cbdLevel: 1, image: image5, terpen: TerpenEnum.LIMONEN },
-];
+import { ProductForm } from './ProductForm';
 
 const CardContainer = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -77,13 +68,25 @@ export const ProductsList:FC = () => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:4000/products') // to jest metoda http GET sluzaca do pobierania danych
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
-    // setProducts(STATIC_PRODUCTS);
-    /* nie dawaj nigdy console.log'a aby sprawdzic czy "set" zadzialal poprawnie
-    wewnatrz useEffectu, bo wartosc widoczna jest dopiero po pelnym wykonaniu, wiec tutaj zawsze bedziesz mial
-    swoj stan poczatkowy. Daj console.log'a poza useEffectem jesli chcesz to sprawdzic. */
+    axios.get('http://localhost:4000/products') // axios.<nazwa_metody_http> wykonuje zapytanie http na podany mu adres
+      // axios.get zwraca Promise
+      .then((response) => {
+        // .then() jest metoda, ktora mozemy wywolywac na Promise
+        // jej argumentem jest funkcja (callback)
+        // w .then() wejdziemy jesli axios.get nie rzuci nam zadnym bledem
+        // wtedy mozemy zareagowac i obsluzyc otrzymany z backendu response
+        // response sklada sie z kilku pol, najwazniejsze z nich to: status (kod http, np 200 lub 201), statusMessage, data
+        // data to sa nasze dane, ktore z backendu powinnismy otrzymac
+        // w tym wypadku, chcemy ustawic to data jako nasz stan komponentu (products)
+        // nie musimy, wiec robic nic wiecej poza ustawieniem tego stanu za pomoca setProducts
+        setProducts(response.data);
+      })
+      .catch((err) => console.log(err));
+    // catch wywola sie kiedy nasz axios.get zwroci Error
+    // wtedy nasz .then zostanie pominiety, a program zacznie wykonywac kod zawarty w .catch
+    // jako argument rowniez przyjmuje funkcje, a argumenetem tej funckji jest error
+    // mozemy rzucic console.log, albo np wyswietlic to jakos userowi.
+
   }, []);
 
   return (
@@ -100,7 +103,7 @@ export const ProductsList:FC = () => {
           );
         })}
       </CardContainer>
-
+      <ProductForm/>
     </Container>
   );
 };
@@ -109,5 +112,5 @@ export const ProductsList:FC = () => {
 1. Przeczytac o fomularzach https://kursjs.pl/kurs/formularze/formularze
 2. Zapoznac sie z dokumentacja react-hook-form https://react-hook-form.com/get-started
 3. Stworzyc ekran dodawania produktu (bez wysylania, sam formularz) *
-4. Stworzyc repozytorium pod frontend i dodac do niego to co mamy do tej pory
+4. Stworzyc repozytorium pod frontend i dodac do niego to co mamy do tej pory DONE
 */

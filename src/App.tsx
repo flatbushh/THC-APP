@@ -7,6 +7,7 @@ import { ContainerFiltr } from './components/ContainerFiltr';
 import { Filtry } from './components/filtry';
 
 function App() {
+
   return (
     <div className='App'>
       <div className='x'>
