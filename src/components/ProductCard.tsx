@@ -13,8 +13,9 @@ import Rating from '@mui/material/Rating';
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
-import { Product } from './ProductsList';
+import { Product } from '../Pages/ProductsList';
 import { switchTerpenIcon } from '../utils/switchTerpenIcon';
+import { useNavigate } from 'react-router-dom';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -27,13 +28,15 @@ const CustomCard = styled(Card)({
   display: 'flex'
 });
 
-export const MuiCard:FC<{product: Product}> =
+export const ProductCard:FC<{product: Product}> =
 ({ product: { id, producentName, strainName, genetics, thcLevel, cbdLevel, image, terpen } }) => {
 
   const [rating, setRating] = useState<number>(0);
+  const navigate = useNavigate();
+
   return (
 
-    <CustomCard key={id}>
+    <CustomCard key={id} onClick={() => navigate(`/product/${id}`)}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -44,8 +47,8 @@ export const MuiCard:FC<{product: Product}> =
 
         <CardContent>
           <Typography gutterBottom variant="h5"> {strainName} </Typography>
-          <Typography gutterBottom variant="h6"> {producentName} </Typography>
-          <Typography gutterBottom variant="h6"> {genetics} </Typography>
+          <Typography gutterBottom variant="h6"> {`${producentName.charAt(0).toUpperCase()}${producentName.slice(1)}`} </Typography>
+          <Typography gutterBottom variant="h6"> {`${genetics.charAt(0).toUpperCase()}${genetics.slice(1)}`} </Typography>
           <Typography gutterBottom variant="h6"> THC {thcLevel} CBD {cbdLevel} </Typography>
 
           <div className="terpeny">
@@ -56,12 +59,6 @@ export const MuiCard:FC<{product: Product}> =
           </div>
           {/* {myFunction} */}
           {/*
-          Mozesz zrobic funkcje, ktora zwraca kod html, albo ikone (svg w twoim przypadku)
-          jesli chcesz dawac rozna ikonke w zaleznosci od jakiejs wartosci to mozesz uzyc do tego
-          switch case'a (jesli bys nie ogarnal to mozesz to tez zrobic if else)
-          wyglada to mniej wiecej tak:
-
-          --------------------------------------------------------------------------------------
 
           switch(case) { // => case jest prosta wartoscia, np string, number
             //case jest argumentem funkcji switch

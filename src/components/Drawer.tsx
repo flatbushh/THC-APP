@@ -31,9 +31,10 @@ import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Product } from './ProductsList';
+import { FilterTypeKeys, FiltersType, Product } from '../Pages/ProductsList';
 import { TerpenEnum } from '../types/Terpen';
 import { switchTerpenIcon } from '../utils/switchTerpenIcon';
+import { GeneticsEnum } from '../types/GeneticsEnum';
 
 const drawerWidth = 240;
 
@@ -69,7 +70,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
@@ -99,23 +99,25 @@ type ProductDrawerType = {
     open: boolean,
     handleDrawerOpen:() => void,
     handleDrawerClose: () => void,
-    products: Product[],
-    setProducts: (products: Product[]) => void
+    selectedGenetics: string | null
+    filterElements: (key: FilterTypeKeys, value: number | number[] | GeneticsEnum | string) => void
 }
+
 export const ProductDrawer:React.FC<ProductDrawerType> =
-({ open, handleDrawerOpen, handleDrawerClose, products, setProducts }) => {
+({ filterElements, selectedGenetics, open, handleDrawerOpen, handleDrawerClose }) => {
   const theme = useTheme();
 
-  const filterProducts = (terpen: TerpenEnum) => {
-    const newList = products.filter((product) => product.terpen === terpen);
-    /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
-    konkretnego produktu jest rowny terpenowi, ktory podalismy jako argument tej funkcji. Jesli tak to go zwracamy, jesli nie
-    to jest usuwany z arraya */
-    setProducts(newList); // DLACZEGO TU KORZYSTAMY Z SETPRODUCTS SKORO NIE MA TU USESTATE W TYM PLIKU ? PROPS
-    /* podajemy nowa liste produktow do funkcji setProducts, ktora jest przekazywana jako props do tego
-    komponentu, a oryginalnie jest wzieta z useState wewnatrz ProductsList. Robimy to po to, zeby spelniac zasady
-    modyfikacji propsow. (one way data flow) NIE ROZUMIEM */
-  };
+  // const filterProducts = (terpen: TerpenEnum) => {
+  //   const newList = products.filter((product) => product.terpen === terpen);
+  //   /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
+  //   konkretnego produktu jest rowny terpenowi, ktory podalismy jako argument tej funkcji. Jesli tak to go zwracamy, jesli nie
+  //   to jest usuwany z arraya */
+  //   setProducts(newList);
+  //   /* podajemy nowa liste produktow do funkcji setProducts, ktora jest przekazywana jako props do tego
+  //   komponentu, a oryginalnie jest wzieta z useState wewnatrz ProductsList. Robimy to po to, zeby spelniac zasady
+  //   modyfikacji propsow. (one way data flow) NIE ROZUMIEM */
+
+  // };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -157,28 +159,17 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
 
         <Divider />
         <List>
-          {FILTER_NAMES.map((filter) =>
-            <ListItem>
+          {FILTER_NAMES.map((filter, index) =>
+            <ListItem key={index}>
               <ListItemIcon>{switchTerpenIcon(filter)}</ListItemIcon>
               <ListItemText>{filter}</ListItemText>
               {/* w tym miejscu wywolujemy wbudowana funkcje map na arrayu
               FILTER_NAMES. Zwracamy sobie JSX.Element (html). Na Chekboxie wykorzystujac
               jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
               ktory jest tak na prawde nazwa terpenu jako argument */}
-              <Checkbox onChange={() => filterProducts(filter)}/>
-              {/* PRACA DOMOWA
-              1. Zmienilismy lsay FILTER_NAMES, wiec przestala dzialac funkcja switchIcon - trzeba ja naprawic DONE
-
-              2. Obecnie dziala filtrowanie produktow jak zaznaczynym checkbox, ale jak odznaczymy to nie wraca do stanu pierwotnego
-              Musimy rozwinac funkcje filterProducts i dac jakis warunek, ktory bedzie nam sprawdzal czy zaznaczamy czy odznaczamy
-              i jesli odznaczamy to przywrocic liste. Co moze byc pomocne:
-              - mozemy filtorwac zawsze po STATIC_PRODUCTS, ale nadal jakos musimy przekminic czy odznaczylismy czy zaznaczylismy
-              - moze byc pomocne array.every()
-              - mozemy zrobic useState na filtry i odpalac funkcje filterProducts np w useEffecie jak zmieni sie filtr ***
-              */}
+              {/* <Checkbox onChange={() => filterProducts(filter)}/> */}
             </ListItem>
           )}
-
         </List>
 
         <List className='producent'>
@@ -189,7 +180,7 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
               noValidate
               autoComplete="off"
             >
-              <TextField id="outlined-basic" label="Producent" variant="outlined" />
+              <TextField id="outlined-basic" label="Producent" variant="outlined" onChange={(event) => filterElements('producentName', event.target.value)} />
 
             </Box>
           </ListItem>
@@ -198,8 +189,8 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
         <List className='genetyka'>
           <ListItem>
             <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Indica" />
-              <FormControlLabel control={<Checkbox />} label="Sativa" />
+              <FormControlLabel  control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Indica" value={GeneticsEnum.INDICA} checked={selectedGenetics === GeneticsEnum.INDICA}/>
+              <FormControlLabel control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Sativa" value={GeneticsEnum.SATIVA} checked={selectedGenetics === GeneticsEnum.SATIVA}/>
 
             </FormGroup>
           </ListItem>
@@ -209,13 +200,13 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
           <ListItem>
             <Box sx={{ width: 300 }}>
               <Slider min={0} max={40}
-
-                aria-label="Custom marks"
-                defaultValue={20}
+                getAriaLabel={() => 'thcLevel'}
+                defaultValue={[0, 40]}
                 getAriaValueText={valuetext}
                 step={5}
                 valueLabelDisplay="auto"
                 marks={marks}
+                onChange={(event, value) => filterElements('thcLevel',value)}
               />
             </Box>
           </ListItem>
@@ -225,29 +216,17 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
           <ListItem>
             <Box sx={{ width: 300 }}>
               <Slider min={0} max={40}
-
-                aria-label="Custom marks"
-                defaultValue={20}
+                getAriaLabel={() => 'cbdLevel'}
+                defaultValue={[0, 40]}
                 getAriaValueText={valuetext}
                 step={5}
                 valueLabelDisplay="auto"
                 marks={marks}
+                onChange={(event, value) => filterElements('cbdLevel', value)}
               />
             </Box>
           </ListItem>
         </List>
-
-        {/*
-        Tutaj mozesz zrobic drugi list z filtrami dotyczacymi np po: (DONE)
-        - genetics
-        - thc level (tu moze byc slider z MUI https://mui.com/material-ui/react-slider/)
-        - cbd level (tu tez slider)
-        - producent (tu zwykly textowy input moze byc)
-
-        - learn git branching: https://learngitbranching.js.org/?locale=pl
-        - zalozyc konto na github (DONE)
-        - zainstalowac git lokalnie https://git-scm.com/download/mac (DONE)
-        */}
       </Drawer>
 
     </Box>
