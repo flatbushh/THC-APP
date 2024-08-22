@@ -18,7 +18,7 @@ export const ProductPreview = () => {
         .then((res) => {
             setProduct(res.data)
             setLoading(false)
-            console.log(res.data)})
+            })
         .catch((err) => {
             setLoading(false)
             console.log(err)})
