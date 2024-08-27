@@ -1,61 +1,75 @@
 /* eslint-disable default-case */
-import { FC, useState } from 'react';
+import { FC, useState } from "react";
 
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea, Grid, styled } from '@mui/material';
-import Rating from '@mui/material/Rating';
-import Checkbox from '@mui/material/Checkbox';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
-import { Product } from '../Pages/ProductsList';
-import { switchTerpenIcon } from '../utils/switchTerpenIcon';
-import { useNavigate } from 'react-router-dom';
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import * as React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea, Grid, styled } from "@mui/material";
+import Rating from "@mui/material/Rating";
+import Checkbox from "@mui/material/Checkbox";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+import { Product } from "../Pages/ProductsList";
+import { switchTerpenIcon } from "../utils/switchTerpenIcon";
+import { useNavigate } from "react-router-dom";
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const CustomCard = styled(Card)({
-  '&:hover': {
-    boxShadow: 20
+  "&:hover": {
+    boxShadow: 20,
   },
-  justifyContent: 'center',
-  alignItems: 'center',
-  display: 'flex'
+  justifyContent: "center",
+  alignItems: "center",
+  display: "flex",
 });
 
-export const ProductCard:FC<{product: Product}> =
-({ product: { id, producentName, strainName, genetics, thcLevel, cbdLevel, image, terpen } }) => {
-
+export const ProductCard: FC<{ product: Product }> = ({
+  product: {
+    id,
+    producentName,
+    strainName,
+    genetics,
+    thcLevel,
+    cbdLevel,
+    image,
+    terpen,
+  },
+}) => {
   const [rating, setRating] = useState<number>(0);
   const navigate = useNavigate();
 
   return (
-
     <CustomCard key={id} onClick={() => navigate(`/product/${id}`)}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image={image}
-          alt="skunks"
-        />
+        <CardMedia component="img" height="140" image={image} alt="skunks" />
 
         <CardContent>
-          <Typography gutterBottom variant="h5"> {strainName} </Typography>
-          <Typography gutterBottom variant="h6"> {`${producentName.charAt(0).toUpperCase()}${producentName.slice(1)}`} </Typography>
-          <Typography gutterBottom variant="h6"> {`${genetics.charAt(0).toUpperCase()}${genetics.slice(1)}`} </Typography>
-          <Typography gutterBottom variant="h6"> THC {thcLevel} CBD {cbdLevel} </Typography>
+          <Typography gutterBottom variant="h5">
+            {" "}
+            {strainName}{" "}
+          </Typography>
+          <Typography gutterBottom variant="h6">
+            {" "}
+            {`${producentName.charAt(0).toUpperCase()}${producentName.slice(
+              1
+            )}`}{" "}
+          </Typography>
+          <Typography gutterBottom variant="h6">
+            {" "}
+            {`${genetics.charAt(0).toUpperCase()}${genetics.slice(1)}`}{" "}
+          </Typography>
+          <Typography gutterBottom variant="h6">
+            {" "}
+            THC {thcLevel} CBD {cbdLevel}{" "}
+          </Typography>
 
           <div className="terpeny">
-            <div>{terpen}</div>
-            <div>
-              {switchTerpenIcon(terpen)}
-            </div>
+            <div>{switchTerpenIcon(terpen)}</div>
           </div>
           {/* {myFunction} */}
           {/*
@@ -99,11 +113,20 @@ export const ProductCard:FC<{product: Product}> =
           }
           */}
 
-          <Stack spacing={1} alignContent={'center'} justifyContent={'center'}>
-            <Rating name= "half-rating" value={rating} defaultValue={2.5} onChange={(newValue) => setRating(Number(newValue))} precision={0.5}/>
+          <Stack spacing={1} alignContent={"center"} justifyContent={"center"}>
+            <Rating
+              name="half-rating"
+              value={rating}
+              defaultValue={2.5}
+              onChange={(newValue) => setRating(Number(newValue))}
+              precision={0.5}
+            />
           </Stack>
-          <Checkbox {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />}/>
-
+          <Checkbox
+            {...label}
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite />}
+          />
         </CardContent>
       </CardActionArea>
     </CustomCard>

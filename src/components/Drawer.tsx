@@ -14,19 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import PercentIcon from "@mui/icons-material/Percent";
-import BoltIcon from "@mui/icons-material/Bolt";
-import GrassIcon from "@mui/icons-material/Grass";
-import { Filter2Sharp, Filter2TwoTone } from "@mui/icons-material";
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
 import Slider from "@mui/material/Slider";
 import TextField from "@mui/material/TextField";
 import FormGroup from "@mui/material/FormGroup";
@@ -35,6 +23,7 @@ import { FilterTypeKeys, FiltersType, Product } from "../Pages/ProductsList";
 import { TerpenEnum } from "../types/Terpen";
 import { switchTerpenIcon } from "../utils/switchTerpenIcon";
 import { GeneticsEnum } from "../types/GeneticsEnum";
+import { geneticsFilters, terpenFilters } from "./checkboxFilterConfig";
 
 const drawerWidth = 240;
 
@@ -103,7 +92,7 @@ type ProductDrawerType = {
   open: boolean;
   handleDrawerOpen: () => void;
   handleDrawerClose: () => void;
-  selectedGenetics: string | null;
+  selectedGenetics: GeneticsEnum | null;
   selectedTerpen: string | null;
   filterElements: (
     key: FilterTypeKeys,
@@ -177,36 +166,27 @@ export const ProductDrawer: React.FC<ProductDrawerType> = ({
 
         <Divider />
         <List>
-          {FILTER_NAMES.map((filter, index) => (
-            <ListItem key={index}>
-              <ListItemIcon>{switchTerpenIcon(filter)}</ListItemIcon>
-              <ListItemText>{filter}</ListItemText>
-              {/* w tym miejscu wywolujemy wbudowana funkcje map na arrayu
-              FILTER_NAMES. Zwracamy sobie JSX.Element (html). Na Chekboxie wykorzystujac
-              jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
-              ktory jest tak na prawde nazwa terpenu jako argument */}
-              {/* <Checkbox onChange={() => filterProducts(filter)}/> */}
-              <ListItem>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onChange={(event) =>
-                          filterElements(
-                            "terpen",
-                            event.target.value as TerpenEnum
-                          )
-                        }
-                      />
-                    }
-                    label="terpen"
-                    value={TerpenEnum}
-                    checked={selectedTerpen === TerpenEnum.CARIOPHILEN}
-                  />
-                </FormGroup>
-              </ListItem>
-            </ListItem>
-          ))}
+          <ListItem>
+            <FormGroup>
+              {terpenFilters().map((filter) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={(event) =>
+                        filterElements(
+                          "terpen",
+                          event.target.value as TerpenEnum
+                        )
+                      }
+                    />
+                  }
+                  label={switchTerpenIcon(filter.label)}
+                  value={filter.value}
+                  checked={selectedTerpen === filter.value}
+                />
+              ))}
+            </FormGroup>
+          </ListItem>
         </List>
 
         <List className="producent">
@@ -227,36 +207,23 @@ export const ProductDrawer: React.FC<ProductDrawerType> = ({
         <List className="genetyka">
           <ListItem>
             <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={(event) =>
-                      filterElements(
-                        "genetics",
-                        event.target.value as GeneticsEnum
-                      )
-                    }
-                  />
-                }
-                label="Indica"
-                value={GeneticsEnum.INDICA}
-                checked={selectedGenetics === GeneticsEnum.INDICA}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={(event) =>
-                      filterElements(
-                        "genetics",
-                        event.target.value as GeneticsEnum
-                      )
-                    }
-                  />
-                }
-                label="Sativa"
-                value={GeneticsEnum.SATIVA}
-                checked={selectedGenetics === GeneticsEnum.SATIVA}
-              />
+              {geneticsFilters().map((filter) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={(event) =>
+                        filterElements(
+                          "genetics",
+                          event.target.value as GeneticsEnum
+                        )
+                      }
+                    />
+                  }
+                  label={filter.label}
+                  value={filter.value}
+                  checked={selectedGenetics === filter.value}
+                />
+              ))}
             </FormGroup>
           </ListItem>
         </List>
