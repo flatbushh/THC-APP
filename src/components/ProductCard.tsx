@@ -71,7 +71,7 @@ export const ProductCard: FC<{ product: Product }> = ({
           <div className="terpeny">
             <div>{switchTerpenIcon(terpen)}</div>
           </div>
-          {/* {myFunction} */}
+
           {/*
 
           switch(case) { // => case jest prosta wartoscia, np string, number

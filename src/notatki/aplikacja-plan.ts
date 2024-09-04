@@ -1,5 +1,5 @@
-/*
-1. Dodac filtr dla terpenow => zostaly style do ogarniecia
+export /*
+1. Dodac filtr dla terpenow => zostaly style do ogarniecia DONE
 2. Zrobic ProductPreview (obsluzyc dane, ktore pobieramy i wyswietlic je w przystepny dla uzytkownika sposob)
 3. Zrobic rejestracje
     - Zrobic nowa podstrone Register
@@ -19,4 +19,4 @@ Plan dzialania:
 1. Na kazde zadanie tworzymy oddzielny branch gita (git checkout -b <moja_nazwa_brancha> np: create-register)
 2. Po zrobieniu kazdego zadania robimy pull request
 3. Jak mamy approve to robimy merge
-*/
+*/ {};

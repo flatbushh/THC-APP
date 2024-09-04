@@ -24,6 +24,7 @@ import { TerpenEnum } from "../types/Terpen";
 import { switchTerpenIcon } from "../utils/switchTerpenIcon";
 import { GeneticsEnum } from "../types/GeneticsEnum";
 import { geneticsFilters, terpenFilters } from "./checkboxFilterConfig";
+import { blue } from "@mui/material/colors";
 
 const drawerWidth = 240;
 
@@ -124,7 +125,12 @@ export const ProductDrawer: React.FC<ProductDrawerType> = ({
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" open={open}>
+      <AppBar
+        position="fixed"
+        open={open}
+        color="inherit"
+        sx={{ backgroundColor: "#348feb" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -219,7 +225,9 @@ export const ProductDrawer: React.FC<ProductDrawerType> = ({
                       }
                     />
                   }
-                  label={filter.label}
+                  label={`${filter.label
+                    .charAt(0)
+                    .toUpperCase()}${filter.label.slice(1)}`}
                   value={filter.value}
                   checked={selectedGenetics === filter.value}
                 />

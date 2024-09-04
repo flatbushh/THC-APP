@@ -44,6 +44,7 @@ export type Product = {
   cbdLevel: number;
   image: string;
   terpen: TerpenEnum;
+  description: string;
 };
 
 export type FiltersType = {
@@ -55,9 +56,6 @@ export type FiltersType = {
 };
 export type FilterTypeKeys = keyof FiltersType;
 // type FilterTypeKeys = 'producentName' | 'genetics' | 'thcLevel' | 'cbdLevel'
-/*
-musimy rozszerzyc FilterType o kolejne filtry
-*/
 
 export const ProductsList: FC = () => {
   const navigate = useNavigate();
@@ -108,10 +106,8 @@ export const ProductsList: FC = () => {
       ...prev,
       [key]: newValue,
     }));
-    /*
-    
-    setFilters((prev) => ({
-      ...prev, // destrukturyzujemy caly obecny state 
+    /* setFilters((prev) => ({
+      ...prev, // destrukturyzujemy caly obecny state
       [key]: value // => np: genetics: value
       nie mozemy zapisac key: value, poniewaz wtedy 'key' bedzie potraktowane jako nazwa klucza
       uzycie nawiasow kwadratowych spowoduje, ze odwolamy sie do wartosci key (czyli np 'genetics')
@@ -235,8 +231,3 @@ export const ProductsList: FC = () => {
     </Container>
   );
 };
-
-/**
- PRACA DOMOWA:
- 1. Dopisac filtr dla terpenow
- */
