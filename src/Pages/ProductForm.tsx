@@ -203,7 +203,7 @@ export const ProductForm = () => {
               sx={{ margin: "20px", width: "90%" }}
               label={"CBD"}
               {...register("cbdLevel")}
-              error={!!errors.cbdLevel}
+              error={!!errors.cbdLevel} 
               helperText={errors.cbdLevel ? errors.cbdLevel.message : ""}
             />
             <TextField
