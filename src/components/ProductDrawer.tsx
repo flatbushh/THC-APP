@@ -143,6 +143,9 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
         <Button variant="contained" onClick={() => navigate("/register")}>
         Register
         </Button>
+        <Button variant="contained" onClick={() => navigate("/login")}>
+        Login
+        </Button>
         
       </AppBar>
 

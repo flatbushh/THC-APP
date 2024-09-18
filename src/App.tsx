@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ProductForm } from './Pages/ProductForm';
 import {ProductPreview} from './Pages/ProductPreview'
 import { Register } from './Pages/Register';
-import { Login } from '@mui/icons-material';
+import { Login } from './Pages/Login';
 
 function App() {
 
@@ -27,6 +27,7 @@ function App() {
             <Route path='add-product' element={<ProductForm />} />
             <Route path="product/:id" element={<ProductPreview/>}/>
             <Route path="register" element={<Register/>}/>
+            <Route path="login" element={<Login/>}/>
             
 
           </Routes>
