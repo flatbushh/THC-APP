@@ -35,6 +35,8 @@ import { FilterTypeKeys, FiltersType, Product } from '../Pages/ProductsList';
 import { TerpenEnum } from '../types/Terpen';
 import { switchTerpenIcon } from '../utils/switchTerpenIcon';
 import { GeneticsEnum } from '../types/GeneticsEnum';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -99,7 +101,8 @@ type ProductDrawerType = {
     open: boolean,
     handleDrawerOpen:() => void,
     handleDrawerClose: () => void,
-    selectedGenetics: string | null
+    selectedGenetics: string | null,
+    selectedTerpen: string | null,
     filterElements: (key: FilterTypeKeys, value: number | number[] | GeneticsEnum | string) => void
 }
 
@@ -118,6 +121,7 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
   //   modyfikacji propsow. (one way data flow) NIE ROZUMIEM */
 
   // };
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -136,6 +140,10 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
             Filtry
           </Typography>
         </Toolbar>
+        <Button variant="contained" onClick={() => navigate("/register")}>
+        Register
+        </Button>
+        
       </AppBar>
 
       <Drawer
@@ -168,6 +176,7 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
               jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
               ktory jest tak na prawde nazwa terpenu jako argument */}
               {/* <Checkbox onChange={() => filterProducts(filter)}/> */}
+              
             </ListItem>
           )}
         </List>

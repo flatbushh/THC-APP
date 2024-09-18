@@ -1,31 +1,33 @@
-import { FC, useEffect, useState } from 'react';
-import { Box, Button, Grid, styled } from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { ProductCard } from '../components/ProductCard';
-import { TerpenEnum } from '../types/Terpen';
-import { Container } from '../components/Container';
-import { ProductDrawer } from '../components/Drawer';
-import { GeneticsEnum } from '../types/GeneticsEnum';
-import { Spinner } from '../components/Spinner';
+import { FC, useEffect, useState } from "react";
+import { Box, Button, Grid, styled } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ProductCard } from "../components/ProductCard";
+import { TerpenEnum } from "../types/Terpen";
+import { Container } from "../components/Container";
+import { ProductDrawer } from "../components/ProductDrawer";
+import { GeneticsEnum } from "../types/GeneticsEnum";
+import { Spinner } from "../components/Spinner";
 
-const CardContainer = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+const CardContainer = styled("main", {
+  shouldForwardProp: (prop) => prop !== "open",
+})<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  transition: theme.transitions.create('margin', {
+  transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
   padding: 30,
-  flexWrap: 'wrap',
-  gap: '50px 20px',
+  flexWrap: "wrap",
+  gap: "50px 20px",
   ...(open && {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -34,33 +36,38 @@ const CardContainer = styled('main', { shouldForwardProp: (prop) => prop !== 'op
 }));
 
 export type Product = {
-    id: number;
-    producentName: string;
-    strainName: string;
-    genetics: GeneticsEnum;
-    thcLevel: number;
-    cbdLevel: number;
-    image: string;
-    terpen: TerpenEnum;
-    }
+  id: number;
+  producentName: string;
+  strainName: string;
+  genetics: GeneticsEnum;
+  thcLevel: number;
+  cbdLevel: number;
+  image: string;
+  terpen: TerpenEnum;
+  description: string;
+};
 
 export type FiltersType = {
-  producentName: string | null
-  genetics: GeneticsEnum | null
-  thcLevel: number[] | null
-  cbdLevel: number[] | null
-}
-export type FilterTypeKeys = keyof FiltersType
+  producentName: string | null;
+  genetics: GeneticsEnum | null;
+  terpen: TerpenEnum | null;
+  thcLevel: number[] | null;
+  cbdLevel: number[] | null;
+};
+export type FilterTypeKeys = keyof FiltersType;
 // type FilterTypeKeys = 'producentName' | 'genetics' | 'thcLevel' | 'cbdLevel'
-/*
-musimy rozszerzyc FilterType o kolejne filtry
-*/
 
-export const ProductsList:FC = () => {
+export const ProductsList: FC = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [open, setOpen] = useState(false);
-  const [filters, setFilters] = useState<FiltersType>({ producentName: null, genetics: null, thcLevel: null, cbdLevel: null });
+  const [filters, setFilters] = useState<FiltersType>({
+    producentName: null,
+    genetics: null,
+    thcLevel: null,
+    cbdLevel: null,
+    terpen: null,
+  });
   const [loading, setLoading] = useState(false);
 
   /* ten useState przyjmuje FilterType jako argument do typu generycznego useState'a ,
@@ -74,37 +81,43 @@ export const ProductsList:FC = () => {
     setOpen(false);
   };
 
-  const filterElements = (key: FilterTypeKeys, value: string | number | number[] | GeneticsEnum) => {
-    if(key === 'producentName') {
-        setFilters((prev) => ({
-          ...prev,
-          producentName: (value as string).length >= 1 ? value as string : null
-        }))
-     
+  const filterElements = (
+    key: FilterTypeKeys,
+    value: string | number | number[] | GeneticsEnum
+  ) => {
+    if (key === "producentName") {
+      setFilters((prev) => ({
+        ...prev,
+        producentName: (value as string).length >= 1 ? (value as string) : null,
+      }));
     }
 
-    let newValue: string | number | number[] | GeneticsEnum | null;
+    let newValue: string | number | number[] | GeneticsEnum | TerpenEnum | null;
 
-    if (key === 'genetics') {
+    if (key === "genetics") {
       newValue = value === filters.genetics ? null : value;
+    } else if (key === "terpen") {
+      newValue = value === filters.terpen ? null : value;
     } else {
       newValue = value;
     }
 
     setFilters((prev) => ({
       ...prev,
-      [key]: newValue
-    }))
-    /*
-    
-    setFilters((prev) => ({
-      ...prev, // destrukturyzujemy caly obecny state 
+      [key]: newValue,
+    }));
+    /* setFilters((prev) => ({
+      ...prev, // destrukturyzujemy caly obecny state
       [key]: value // => np: genetics: value
       nie mozemy zapisac key: value, poniewaz wtedy 'key' bedzie potraktowane jako nazwa klucza
       uzycie nawiasow kwadratowych spowoduje, ze odwolamy sie do wartosci key (czyli np 'genetics')
     }))
     */
-  }
+  };
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
 
   // const filterProducts = (value: string) => {
   //   setTimeout(() => {
@@ -134,7 +147,6 @@ export const ProductsList:FC = () => {
   //     cbdLevel: prev.thcLevel }));
   // };
 
-
   // const filterCBDLevel = (value: number | number[]) => {
   //   const newValueTwo = Array.isArray(value) ? value : null;
   //   setFilters((prev) => ({
@@ -152,12 +164,13 @@ export const ProductsList:FC = () => {
   */
 
   useEffect(() => {
-    setLoading(true)
-    
-    axios.post('http://localhost:4000/products', filters) // axios.<nazwa_metody_http> wykonuje zapytanie http na podany mu adres
+    setLoading(true);
+
+    axios
+      .post("http://localhost:4000/products", filters) // axios.<nazwa_metody_http> wykonuje zapytanie http na podany mu adres
       // axios.get zwraca Promise
       .then((response) => {
-        setProducts(response.data); 
+        setProducts(response.data);
         // .then() jest metoda, ktora mozemy wywolywac na Promise
         // jej argumentem jest funkcja (callback)b
         // w .then() wejdziemy jesli axios.get nie rzuci nam zadnym bledem
@@ -168,49 +181,53 @@ export const ProductsList:FC = () => {
         // nie musimy, wiec robic nic wiecej poza ustawieniem tego stanu za pomoca setProducts
         //setLoading(false)
       })
-      .catch((err) => {console.log(err)
+      .catch((err) => {
+        console.log(err);
         //setLoading(false)
-      }
-        )
+      });
     // catch wywola sie kiedy nasz axios.get zwroci Error
     // wtedy nasz .then zostanie pominiety, a program zacznie wykonywac kod zawarty w .catch
     // jako argument rowniez przyjmuje funkcje, a argumenetem tej funckji jest error
     // mozemy rzucic console.log, albo np wyswietlic to jakos userowi.
-
   }, [filters]);
 
   useEffect(() => {
-    setLoading(false)
-  }, [products])
+    setLoading(false);
+  }, [products]);
 
   return (
     <Container>
-    
-      {loading ? <Spinner/> : null}    {/* loading && <Spinner/> */} {/* false zainicjowane w useState nie ma znaczenia, bo setLoading zmienia wartość loading w zaleności od potrzeby */}
-      
-      <ProductDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}
-         selectedGenetics={filters.genetics}
-        filterElements={filterElements}/>
-     
+      {loading ? <Spinner /> : null} {/* loading && <Spinner/> */}{" "}
+      {/* false zainicjowane w useState nie ma znaczenia, bo setLoading zmienia wartość loading w zaleności od potrzeby */}
+      <ProductDrawer
+        open={open}
+        handleDrawerClose={handleDrawerClose}
+        handleDrawerOpen={handleDrawerOpen}
+        selectedGenetics={filters.genetics}
+        selectedTerpen={filters.terpen}
+        filterElements={filterElements}
+      />
       <CardContainer open={open}>
-         {products.length < 1 && 
-      <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        No products found  
-      </Box>} 
+        {products.length < 1 && (
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            No products found
+          </Box>
+        )}
         {products.map((product, index) => {
-          return (
-
-            <ProductCard product={product} key={index}/>
-
-          );
+          return <ProductCard product={product} key={index} />;
         })}
       </CardContainer>
-      <Button variant='contained' onClick={() => navigate('/add-product')}>Add product</Button>
+      <Button variant="contained" onClick={() => navigate("/add-product")}>
+        Add product
+      </Button>
     </Container>
   );
 };
-
-/**
- PRACA DOMOWA:
- 1. Dopisac filtr dla terpenow
- */
