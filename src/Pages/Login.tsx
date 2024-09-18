@@ -12,7 +12,7 @@ const registerSchema = object({
    
   });
 
-type FormValues = { //defining types of form fields
+type FormValues = { 
     email: string,
     password: string,
     
@@ -21,9 +21,9 @@ type FormValues = { //defining types of form fields
 export const Login = () => {
 
   const {
-    register, //allow to register individual inputs into the hook form
-    handleSubmit, //to retrieve the value after clicking submit
-    formState: { errors }, //displaying an error if any input is invalid 
+    register, 
+    handleSubmit, 
+    formState: { errors }, 
   } = useForm<FormValues>({ resolver: yupResolver(registerSchema), mode: 'all', defaultValues: {email: "", password: ""} });
 
     const navigate = useNavigate();
@@ -74,10 +74,7 @@ return (
               label={"email"}
               type="text"
               {...register("email")}
-              error={!!errors.email} //!! is used to convert value into a boolean, It ensures that any truthy value becomes true, and any falsy value becomes false.
-              //errors.email will either be undefined (when there is no error) or contain an error object (when validation fails).
-              //By using !!, you convert undefined to false and a defined error object to true
-              // !!erros.email to to samo co Boolean(errors.email)
+              error={!!errors.email} 
               helperText={
                 errors.email ? errors.email.message : ''
               }
@@ -87,7 +84,7 @@ return (
               sx={{ margin: "20px", width: "90%" }}
               label={"password"}
               type="password"
-              {...register("password" /*{validate: (value)=>value.includes("@")}*/)}
+              {...register("password")}
               error={!!errors.email}
               helperText={
                 errors.password ? errors.password.message : ""
