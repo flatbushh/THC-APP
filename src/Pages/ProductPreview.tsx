@@ -37,17 +37,6 @@ export const ProductPreview = () => {
   const goBack = () => {
     navigate(-1);
   };
-    useEffect(() => {
-        setLoading(true)
-        axios.get(`http://localhost:4000/product/${id}`)
-        .then((res) => {
-            setProduct(res.data)
-            setLoading(false)
-            })
-        .catch((err) => {
-            setLoading(false)
-            console.log(err)})
-    }, [])
 
   useEffect(() => {
     setLoading(true);
