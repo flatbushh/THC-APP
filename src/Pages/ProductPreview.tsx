@@ -34,11 +34,9 @@ export const ProductPreview = () => {
   const [product, setProduct] = useState<Product>();
   const navigate = useNavigate();
 
-<<<<<<< HEAD
   const goBack = () => {
     navigate(-1);
   };
-=======
     useEffect(() => {
         setLoading(true)
         axios.get(`http://localhost:4000/product/${id}`)
@@ -50,7 +48,6 @@ export const ProductPreview = () => {
             setLoading(false)
             console.log(err)})
     }, [])
->>>>>>> d573f92ff1693f42afbd4cfa61c40af7a985fe65
 
   useEffect(() => {
     setLoading(true);
