@@ -35,8 +35,10 @@ export const ProductPreview = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate(-1);
+    navigate("/");
   };
+
+   
 
   useEffect(() => {
     setLoading(true);

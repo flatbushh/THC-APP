@@ -103,40 +103,33 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 type ProductDrawerType = {
-  open: boolean;
-  handleDrawerOpen: () => void;
-  handleDrawerClose: () => void;
-  selectedGenetics: GeneticsEnum | null;
-  selectedTerpen: string | null;
-  filterElements: (
-    key: FilterTypeKeys,
-    value: number | number[] | GeneticsEnum | string
-  ) => void;
-};
+    open: boolean,
+    handleDrawerOpen:() => void,
+    handleDrawerClose: () => void,
+    selectedGenetics: string | null,
+    selectedTerpen: string | null,
+    filterElements: (key: FilterTypeKeys, value: number | number[] | GeneticsEnum | string) => void
+    products: Product[];
+    setProducts: (products: Product[]) => void
+}
 
-export const ProductDrawer: React.FC<ProductDrawerType> = ({
-  filterElements,
-  selectedGenetics,
-  selectedTerpen,
-  open,
-  handleDrawerOpen,
-  handleDrawerClose,
-}) => {
+export const ProductDrawer:React.FC<ProductDrawerType> =
+({ filterElements, selectedGenetics, open, handleDrawerOpen, handleDrawerClose, products, setProducts }) => {
   const theme = useTheme();
 
-  // const filterProducts = (terpen: TerpenEnum) => {
-  //   const newList = products.filter((product) => product.terpen === terpen);
-  //   /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
+ 
+  /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
   //   konkretnego produktu jest rowny terpenowi, ktory podalismy jako argument tej funkcji. Jesli tak to go zwracamy, jesli nie
   //   to jest usuwany z arraya */
-  //   setProducts(newList);
+
   //   /* podajemy nowa liste produktow do funkcji setProducts, ktora jest przekazywana jako props do tego
   //   komponentu, a oryginalnie jest wzieta z useState wewnatrz ProductsList. Robimy to po to, zeby spelniac zasady
-  //   modyfikacji propsow. (one way data flow) NIE ROZUMIEM */
+  //   modyfikacji propsow. (one way data flow)*/
 
   // };
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+}
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
@@ -157,6 +150,10 @@ export const ProductDrawer: React.FC<ProductDrawerType> = ({
         <Button variant="contained" onClick={() => navigate("/register")}>
           Register
         </Button>
+        <Button variant="contained" onClick={() => navigate("/login")}>
+        Login
+        </Button>
+        
       </AppBar>
 
       <Drawer
@@ -184,25 +181,37 @@ export const ProductDrawer: React.FC<ProductDrawerType> = ({
 
         <Divider />
         <List>
+          {FILTER_NAMES.map((filter, index) =>
+            <ListItem key={index}>
+              <ListItemIcon>{switchTerpenIcon(filter)}</ListItemIcon>
+              <ListItemText>{filter}</ListItemText>
+              {/* w tym miejscu wywolujemy wbudowana funkcje map na arrayu
+              FILTER_NAMES. Zwracamy sobie JSX.Element (html). Na Chekboxie wykorzystujac
+              jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
+              ktory jest tak na prawde nazwa terpenu jako argument */}
+            
+              <Checkbox onChange={() => filterElements('terpen', filter)}/>              
+            </ListItem>
+          )}
+        </List>
+
+        <List className='producent'>
+          <ListItem>
+            <Box
+              component="form"
+              noValidate
+              autoComplete="off"
+            >
+              <TextField id="outlined-basic" label="Producent" variant="outlined" onChange={(event) => filterElements('producentName', event.target.value)} />
+            </Box>
+          </ListItem>
+        </List>
+
+        <List className='genetyka'>
           <ListItem>
             <FormGroup>
-              {terpenFilters().map((filter) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onChange={(event) =>
-                        filterElements(
-                          "terpen",
-                          event.target.value as TerpenEnum
-                        )
-                      }
-                    />
-                  }
-                  label={switchTerpenIcon(filter.label)}
-                  value={filter.value}
-                  checked={selectedTerpen === filter.value}
-                />
-              ))}
+              <FormControlLabel  control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Indica" value={GeneticsEnum.INDICA} checked={selectedGenetics === GeneticsEnum.INDICA}/>
+              <FormControlLabel control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Sativa" value={GeneticsEnum.SATIVA} checked={selectedGenetics === GeneticsEnum.SATIVA}/>
             </FormGroup>
           </ListItem>
         </List>

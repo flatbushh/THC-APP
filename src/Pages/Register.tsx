@@ -1,10 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Card, CardContent, Grid, TextField, styled } from "@mui/material";
+import { Box, Button, Card as MuiCard, CardContent, Grid, TextField, styled } from "@mui/material";
 import axios from "axios";
 import React from "react"
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { number, object, ref, string } from "yup";
+import { useAlertContext } from "../context/AlertContext";
 
 const registerSchema = object({
     email: string().email('Invalid email').required('Email is required'),
@@ -18,7 +19,19 @@ type FormValues = { //defining types of form fields
     passwordMatch: string
 }
 
+const Card = styled(MuiCard)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  width: "100vw",
+  borderRadius: "16px",
+  padding: 25,
+  flexWrap: "wrap",
+});
+
 export const Register = () => {
+  const {showErrorAlert, showSuccessAlert} = useAlertContext();
 
   const {
     register, //allow to register individual inputs into the hook form
@@ -30,31 +43,24 @@ export const Register = () => {
 
     
 
-  const goBack = () => {
-    navigate(-1);
-  };
+    const goBack = () => {
+      navigate("/");
+    };
 
 
-  const CustomCard = styled(Card)({
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    width: "100vw",
-    borderRadius: "16px",
-    padding: 25,
-    flexWrap: "wrap",
-  });
+  
 
 
   const onSubmit = async (data: FormValues) => {
     await axios.post("http://localhost:4000/register", data)
       .then(() => {
-        navigate("/");
-        console.log(data);
+        showSuccessAlert('Registered')
+        // navigate("/");
+        // console.log(data);
       })
       .catch((err) => {
-        console.log(err);
+        showErrorAlert(err.response.data ?? 'Unexpected error')
+        // console.log(err);
       });
   };
 //gdy konstruuje klasyczny promise to podaje w argumrntavh reoslve i reject czy w async jest on gdzies schowany pod spodem
@@ -70,7 +76,7 @@ export const Register = () => {
 
 
 return ( 
-    <CustomCard>
+    <Card>
         <CardContent>
 
           <form onSubmit={handleSubmit(onSubmit)}
@@ -79,9 +85,12 @@ return (
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "column",
+              width: '600px',
+              border: '1px solid black',
+              gap: '10px'
             }}>
-                <TextField
-              sx={{ margin: "20px", width: "90%" }}
+             <TextField
+              fullWidth
               label={"email"}
               type="text"
               {...register("email")}
@@ -95,7 +104,7 @@ return (
             />
 
             <TextField
-              sx={{ margin: "20px", width: "90%" }}
+              fullWidth
               label={"password"}
               type="password"
               {...register("password" /*{validate: (value)=>value.includes("@")}*/)}
@@ -106,7 +115,8 @@ return (
             />
 
             <TextField
-              sx={{ margin: "20px", width: "90%" }}
+              fullWidth
+              // sx={{ margin: "20px", width: "90%" }}
               label={"passwordMatch"}
               type="password"
               {...register("passwordMatch")}
@@ -128,6 +138,6 @@ return (
             
             
         </CardContent>
-    </CustomCard>
+    </Card>
 )
 }
