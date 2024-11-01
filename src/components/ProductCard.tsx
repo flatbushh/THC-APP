@@ -83,8 +83,6 @@ export const ProductCard: FC<{ product: Product }> = ({
     </CustomCard>
   );
 };
-
-
 {/*
 
           switch(case) { // => case jest prosta wartoscia, np string, number
@@ -145,4 +143,3 @@ export const ProductCard: FC<{ product: Product }> = ({
     </CustomCard>
   );
 };
-        

@@ -19,7 +19,6 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 import { TerpenEnum } from "../types/Terpen";
 import { GeneticsEnum } from "../types/GeneticsEnum";
 
@@ -47,7 +46,6 @@ const CustomCard = styled(Card)({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-
   borderRadius: "16px",
   padding: 25,
   flexWrap: "wrap",
@@ -78,7 +76,7 @@ export const ProductForm = () => {
     mode: "all",
     defaultValues,
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -203,7 +201,7 @@ export const ProductForm = () => {
               sx={{ margin: "20px", width: "90%" }}
               label={"CBD"}
               {...register("cbdLevel")}
-              error={!!errors.cbdLevel} 
+              error={!!errors.cbdLevel}
               helperText={errors.cbdLevel ? errors.cbdLevel.message : ""}
             />
             <TextField
