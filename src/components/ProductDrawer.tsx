@@ -26,7 +26,7 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import GrassIcon from "@mui/icons-material/Grass";
 import { Filter2Sharp, Filter2TwoTone } from "@mui/icons-material";
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
+import { FC, useState } from "react";
 import Slider from "@mui/material/Slider";
 import TextField from "@mui/material/TextField";
 import FormGroup from "@mui/material/FormGroup";
@@ -113,7 +113,7 @@ type ProductDrawerType = {
     setProducts: (products: Product[]) => void
 }
 
-export const ProductDrawer:React.FC<ProductDrawerType> =
+export const ProductDrawer: FC<ProductDrawerType> =
 ({ filterElements, selectedGenetics, open, handleDrawerOpen, handleDrawerClose, products, setProducts }) => {
   const theme = useTheme();
 
@@ -129,7 +129,7 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
   // };
 
   const navigate = useNavigate();
-}
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
