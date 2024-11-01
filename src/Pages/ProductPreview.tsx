@@ -36,7 +36,7 @@ export const ProductPreview = () => {
 
 
   const goBack = () => {
-    navigate(-1);
+    navigate("/");
   };
 
    

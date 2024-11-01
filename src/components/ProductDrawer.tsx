@@ -104,23 +104,25 @@ type ProductDrawerType = {
     selectedGenetics: string | null,
     selectedTerpen: string | null,
     filterElements: (key: FilterTypeKeys, value: number | number[] | GeneticsEnum | string) => void
+    products: Product[];
+    setProducts: (products: Product[]) => void
 }
 
 export const ProductDrawer:React.FC<ProductDrawerType> =
-({ filterElements, selectedGenetics, open, handleDrawerOpen, handleDrawerClose }) => {
+({ filterElements, selectedGenetics, open, handleDrawerOpen, handleDrawerClose, products, setProducts }) => {
   const theme = useTheme();
 
-  // const filterProducts = (terpen: TerpenEnum) => {
-  //   const newList = products.filter((product) => product.terpen === terpen);
-  //   /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
+ 
+  /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
   //   konkretnego produktu jest rowny terpenowi, ktory podalismy jako argument tej funkcji. Jesli tak to go zwracamy, jesli nie
   //   to jest usuwany z arraya */
-  //   setProducts(newList);
+
   //   /* podajemy nowa liste produktow do funkcji setProducts, ktora jest przekazywana jako props do tego
   //   komponentu, a oryginalnie jest wzieta z useState wewnatrz ProductsList. Robimy to po to, zeby spelniac zasady
-  //   modyfikacji propsow. (one way data flow) NIE ROZUMIEM */
+  //   modyfikacji propsow. (one way data flow)*/
 
   // };
+
   const navigate = useNavigate();
 
   return (
@@ -178,14 +180,13 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
               FILTER_NAMES. Zwracamy sobie JSX.Element (html). Na Chekboxie wykorzystujac
               jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
               ktory jest tak na prawde nazwa terpenu jako argument */}
-              {/* <Checkbox onChange={() => filterProducts(filter)}/> */}
-              
+            
+              <Checkbox onChange={() => filterElements('terpen', filter)}/>              
             </ListItem>
           )}
         </List>
 
         <List className='producent'>
-
           <ListItem>
             <Box
               component="form"
@@ -193,7 +194,6 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
               autoComplete="off"
             >
               <TextField id="outlined-basic" label="Producent" variant="outlined" onChange={(event) => filterElements('producentName', event.target.value)} />
-
             </Box>
           </ListItem>
         </List>
@@ -203,7 +203,6 @@ export const ProductDrawer:React.FC<ProductDrawerType> =
             <FormGroup>
               <FormControlLabel  control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Indica" value={GeneticsEnum.INDICA} checked={selectedGenetics === GeneticsEnum.INDICA}/>
               <FormControlLabel control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Sativa" value={GeneticsEnum.SATIVA} checked={selectedGenetics === GeneticsEnum.SATIVA}/>
-
             </FormGroup>
           </ListItem>
         </List>

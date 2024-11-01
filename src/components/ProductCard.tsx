@@ -57,8 +57,20 @@ export const ProductCard:FC<{product: Product}> =
               {switchTerpenIcon(terpen)}
             </div>
           </div>
-          {/* {myFunction} */}
-          {/*
+
+          <Stack spacing={1} alignContent={'center'} justifyContent={'center'}>
+            <Rating name= "half-rating" value={rating} defaultValue={2.5} onChange={(newValue) => setRating(Number(newValue))} precision={0.5}/>
+          </Stack>
+          <Checkbox {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />}/>
+
+        </CardContent>
+      </CardActionArea>
+    </CustomCard>
+  );
+};
+
+
+{/*
 
           switch(case) { // => case jest prosta wartoscia, np string, number
             //case jest argumentem funkcji switch
@@ -98,14 +110,3 @@ export const ProductCard:FC<{product: Product}> =
             }
           }
           */}
-
-          <Stack spacing={1} alignContent={'center'} justifyContent={'center'}>
-            <Rating name= "half-rating" value={rating} defaultValue={2.5} onChange={(newValue) => setRating(Number(newValue))} precision={0.5}/>
-          </Stack>
-          <Checkbox {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />}/>
-
-        </CardContent>
-      </CardActionArea>
-    </CustomCard>
-  );
-};
