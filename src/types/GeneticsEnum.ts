@@ -1,4 +1,4 @@
 export enum GeneticsEnum {
-    'INDICA'='indica',
-    'SATIVA'='sativa'
+  "INDICA" = "indica",
+  "SATIVA" = "sativa",
 }
