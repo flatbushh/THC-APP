@@ -103,21 +103,28 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 type ProductDrawerType = {
-    open: boolean,
-    handleDrawerOpen:() => void,
-    handleDrawerClose: () => void,
-    selectedGenetics: string | null,
-    selectedTerpen: string | null,
-    filterElements: (key: FilterTypeKeys, value: number | number[] | GeneticsEnum | string) => void
-    products: Product[];
-    setProducts: (products: Product[]) => void
-}
+  open: boolean;
+  handleDrawerOpen: () => void;
+  handleDrawerClose: () => void;
+  selectedGenetics: string | null;
+  selectedTerpen: string | null;
+  filterElements: (
+    key: FilterTypeKeys,
+    value: number | number[] | GeneticsEnum | string
+  ) => void;
+  products: Product[];
+  setProducts: (products: Product[]) => void;
+};
 
-export const ProductDrawer: FC<ProductDrawerType> =
-({ filterElements, selectedGenetics, open, handleDrawerOpen, handleDrawerClose, products, setProducts }) => {
+export const ProductDrawer: FC<ProductDrawerType> = ({
+  filterElements,
+  selectedGenetics,
+  open,
+  handleDrawerOpen,
+  handleDrawerClose,
+}) => {
   const theme = useTheme();
 
- 
   /* tutaj wywolujemy klasyczny filter (wbudowana funkcja w js na arrayu) i spra+wdzamy czy terpen
   //   konkretnego produktu jest rowny terpenowi, ktory podalismy jako argument tej funkcji. Jesli tak to go zwracamy, jesli nie
   //   to jest usuwany z arraya */
@@ -151,9 +158,8 @@ export const ProductDrawer: FC<ProductDrawerType> =
           Register
         </Button>
         <Button variant="contained" onClick={() => navigate("/login")}>
-        Login
+          Login
         </Button>
-        
       </AppBar>
 
       <Drawer
@@ -181,7 +187,7 @@ export const ProductDrawer: FC<ProductDrawerType> =
 
         <Divider />
         <List>
-          {FILTER_NAMES.map((filter, index) =>
+          {FILTER_NAMES.map((filter, index) => (
             <ListItem key={index}>
               <ListItemIcon>{switchTerpenIcon(filter)}</ListItemIcon>
               <ListItemText>{filter}</ListItemText>
@@ -189,31 +195,10 @@ export const ProductDrawer: FC<ProductDrawerType> =
               FILTER_NAMES. Zwracamy sobie JSX.Element (html). Na Chekboxie wykorzystujac
               jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
               ktory jest tak na prawde nazwa terpenu jako argument */}
-            
-              <Checkbox onChange={() => filterElements('terpen', filter)}/>              
+
+              <Checkbox onChange={() => filterElements("terpen", filter)} />
             </ListItem>
-          )}
-        </List>
-
-        <List className='producent'>
-          <ListItem>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-            >
-              <TextField id="outlined-basic" label="Producent" variant="outlined" onChange={(event) => filterElements('producentName', event.target.value)} />
-            </Box>
-          </ListItem>
-        </List>
-
-        <List className='genetyka'>
-          <ListItem>
-            <FormGroup>
-              <FormControlLabel  control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Indica" value={GeneticsEnum.INDICA} checked={selectedGenetics === GeneticsEnum.INDICA}/>
-              <FormControlLabel control={<Checkbox onChange={(event) => filterElements('genetics', event.target.value as GeneticsEnum)}  />} label="Sativa" value={GeneticsEnum.SATIVA} checked={selectedGenetics === GeneticsEnum.SATIVA}/>
-            </FormGroup>
-          </ListItem>
+          ))}
         </List>
 
         <List className="producent">
@@ -234,23 +219,36 @@ export const ProductDrawer: FC<ProductDrawerType> =
         <List className="genetyka">
           <ListItem>
             <FormGroup>
-              {geneticsFilters().map((filter) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onChange={(event) =>
-                        filterElements(
-                          "genetics",
-                          event.target.value as GeneticsEnum
-                        )
-                      }
-                    />
-                  }
-                  label={filter.label}
-                  value={filter.value}
-                  checked={selectedGenetics === filter.value}
-                />
-              ))}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={(event) =>
+                      filterElements(
+                        "genetics",
+                        event.target.value as GeneticsEnum
+                      )
+                    }
+                  />
+                }
+                label="Indica"
+                value={GeneticsEnum.INDICA}
+                checked={selectedGenetics === GeneticsEnum.INDICA}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={(event) =>
+                      filterElements(
+                        "genetics",
+                        event.target.value as GeneticsEnum
+                      )
+                    }
+                  />
+                }
+                label="Sativa"
+                value={GeneticsEnum.SATIVA}
+                checked={selectedGenetics === GeneticsEnum.SATIVA}
+              />
             </FormGroup>
           </ListItem>
         </List>
