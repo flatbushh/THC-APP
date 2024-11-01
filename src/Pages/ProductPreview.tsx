@@ -38,8 +38,6 @@ export const ProductPreview = () => {
     navigate("/");
   };
 
-   
-
   useEffect(() => {
     setLoading(true);
     axios
