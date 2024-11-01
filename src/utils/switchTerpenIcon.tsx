@@ -3,23 +3,42 @@ import { TerpenEnum } from "../types/Terpen";
 import { Box, styled } from "@mui/material";
 
 const StyledBox = styled(Box)({
-  background: "red",
+  background: "white",
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
 });
 
 export const switchTerpenIcon = (terpenType: TerpenEnum) => {
-  // eslint-disable-next-line default-case
   switch (terpenType) {
     case TerpenEnum.LIMONEN:
       return (
         <StyledBox>
-          <SpaIcon sx={{ color: "yellow" }} /> {TerpenEnum.LIMONEN}
+          <SpaIcon sx={{ color: "yellow" }} />
+          {`${TerpenEnum.LIMONEN.charAt(
+            0
+          ).toUpperCase()}${TerpenEnum.LIMONEN.slice(1)}`}
         </StyledBox>
       );
 
     case TerpenEnum.CARIOPHILEN:
-      return <SpaIcon sx={{ color: "green" }} />;
+      return (
+        <StyledBox>
+          <SpaIcon sx={{ color: "green" }} />
+          {`${TerpenEnum.CARIOPHILEN.charAt(
+            0
+          ).toUpperCase()}${TerpenEnum.CARIOPHILEN.slice(1)}`}
+        </StyledBox>
+      );
 
     case TerpenEnum.MIRCEN:
-      return <SpaIcon sx={{ color: "purple" }} />;
+      return (
+        <StyledBox>
+          <SpaIcon sx={{ color: "purple" }} />
+          {`${TerpenEnum.MIRCEN.charAt(
+            0
+          ).toUpperCase()}${TerpenEnum.MIRCEN.slice(1)}`}
+        </StyledBox>
+      );
   }
 };

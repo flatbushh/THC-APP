@@ -101,4 +101,5 @@ export const ProductPreview = () => {
     </StyledBox>
   );
 };
+//nie wiem jak przekazać producent, strain, terpen i genetics i jak zrobic description skoro dla wszystkich produktów będzie innne
 //const [products, setProducts] = useState<Product[]>([]);
