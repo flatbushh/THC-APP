@@ -28,8 +28,10 @@ const productSchema = object({
   strainName: string().min(4).max(20).required("This field is required"),
   genetics: string().min(4).max(15).required(),
   terpen: string().required(),
-  thcLevel: number().positive().integer().min(1).required(),
-  cbdLevel: number().positive().integer().min(1).required(),
+  thcLevel: number().positive().integer().min(1)
+  .required(),
+  cbdLevel: number().positive().integer().min(1)
+  .required(),
   description: string().required(),
 });
 
@@ -78,7 +80,7 @@ export const ProductForm = () => {
     mode: "all",
     defaultValues,
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -203,7 +205,7 @@ export const ProductForm = () => {
               sx={{ margin: "20px", width: "90%" }}
               label={"CBD"}
               {...register("cbdLevel")}
-              error={!!errors.cbdLevel} 
+              error={!!errors.cbdLevel}
               helperText={errors.cbdLevel ? errors.cbdLevel.message : ""}
             />
             <TextField

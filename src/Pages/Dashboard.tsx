@@ -1,12 +1,22 @@
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Button, Drawer } from "@mui/material";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Button,
+  Drawer,
+} from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import GroupIcon from '@mui/icons-material/Group';
+import GroupIcon from "@mui/icons-material/Group";
 
 export const Dashboard = () => {
-    const [open, setOpen] = React.useState(false);
-    const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -14,30 +24,29 @@ export const Dashboard = () => {
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      
       <List>
         <ListItem>
-                <ListItemButton onClick={() => navigate("/add-product")}> 
-                     <ListItemIcon>
-                     <AddCircleOutlineIcon/>
-                     </ListItemIcon>
-                     <ListItemText primary="Add Product" />       
-            </ListItemButton>
+          <ListItemButton onClick={() => navigate("/add-product")}>
+            <ListItemIcon>
+              <AddCircleOutlineIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add Product" />
+          </ListItemButton>
         </ListItem>
 
-        <Divider/>
-      
-        <ListItem>    
-                <ListItemButton onClick={() => navigate("/users")}> 
-                     <ListItemIcon>
-                     <GroupIcon/>
-                     </ListItemIcon>
-                     <ListItemText primary="Users data"/>
-                </ListItemButton>
+        <Divider />
+
+        <ListItem>
+          <ListItemButton onClick={() => navigate("/users")}>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
+            <ListItemText primary="Users data" />
+          </ListItemButton>
         </ListItem>
       </List>
 
-      <Divider/>      
+      <Divider />
     </Box>
   );
 
@@ -49,4 +58,4 @@ export const Dashboard = () => {
       </Drawer>
     </div>
   );
-}
+};
