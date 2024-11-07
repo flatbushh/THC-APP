@@ -8,6 +8,7 @@ interface User {
 }
 
 export const Users = () => {
+
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -51,4 +52,5 @@ export const Users = () => {
       <DataGrid rows={rows} columns={columns} />
     </div>
   );
+
 };
