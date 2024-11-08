@@ -138,7 +138,10 @@ export const Drawer = ({ children }: PropsWithChildren) => {
         </DrawerHeader>
         <MenuList />
       </MuiDrawer>
-      <Main open={open}>{children}</Main>
+      <Main open={open}>
+        {children}
+        {/* wszytsko co jest owrapowane drawerem w app.tsx (w naszym przypadku wszystko z outlet) wpada tu w children jako argument i jest zwracane w tym miejscu? */}
+      </Main>
     </Box>
   );
 };

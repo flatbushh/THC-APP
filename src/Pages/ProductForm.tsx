@@ -27,8 +27,10 @@ const productSchema = object({
   strainName: string().min(4).max(20).required("This field is required"),
   genetics: string().min(4).max(15).required(),
   terpen: string().required(),
-  thcLevel: number().positive().integer().min(1).required(),
-  cbdLevel: number().positive().integer().min(1).required(),
+  thcLevel: number().positive().integer().min(1)
+  .required(),
+  cbdLevel: number().positive().integer().min(1)
+  .required(),
   description: string().required(),
 });
 
