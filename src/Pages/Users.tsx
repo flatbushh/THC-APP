@@ -9,7 +9,7 @@ interface User {
 
 export const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
-
+  const [error, setError] = useState(false);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -17,7 +17,7 @@ export const Users = () => {
         setUsers(response.data); // przypisuję dane userów do zmiennej users z useState
         console.log(response.data); //sprawdzam czy właściwe dane są pobrane
       } catch (err) {
-        console.log(err);
+        setError(true)
       }
     };
 
@@ -48,6 +48,7 @@ export const Users = () => {
 
   return (
     <div style={{ height: 400, width: "100%" }}>
+      {error && <p>something went wrong</p>}
       <DataGrid rows={rows} columns={columns} />
     </div>
   );

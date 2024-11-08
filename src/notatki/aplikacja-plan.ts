@@ -69,11 +69,20 @@ Plan dzialania:
         - w body requestu musimy przekazac informacje o roli, ktora chcemy przypisac userowi
         - wykonujemy request do bazy gdzie podmieniamy poprzednia role na ta wyslana w req.body
     4. Na froncie robimy nowa podstrone '/assign-role'
-        - mamy do wyboru dwie role (nie moga byc dwie jednoczesnie): ADMIN i CLIENT
+        - mamy do wyboru dwie role (nie moze miec przypisanych dwoch jednoczesnie, 
+            oraz nie moze wybrac tej, ktora juz aktualnie ma przypisana): ADMIN i CLIENT
         - wybieramy role, ktora chcemy przypisac i wysylamy request na endpoint z punktu 3.
         -* powinnismy zaznaczyc w jakis sposob (np MUI Badge, albo kolorem jakkolwiek), ktora role aktualnie posiada user
-        -* po zmianie tej roli, powinnismy pobrac jeszcze raz dane usera i zaznaczyc nowa wybrana jako aktualna 
+        - po zmianie tej roli, powinnismy pobrac jeszcze raz dane usera i zaznaczyc nowa wybrana jako aktualna 
         - wysylanie requestu musi uwzgledniac obsluge bledow (nasze alert context)
+        sugestia: wykorzystac do stworzenia tego MUICard, powinien byc jakis header, a do wyboru roli moga nam posluzyc:
+        Button, Checkbox, Switch ktore najbardziej Ci pasuje
+    5. W tablie Users powinny byc dwa przyciski:
+        a). Przekierowanie do /assign-role strony z punktu 4
+    --------------------------------------------------------------------------------------------
+        b). UserPreview -> nowa podstrona z podgladem usera
+            - ma wyswietlac dane usera, ktore posiadamy (poszukaj na dribble.com)
+
 *********
 later:
 podglad usera, sledzenie historii edycji produktu od jego stworzenia;
