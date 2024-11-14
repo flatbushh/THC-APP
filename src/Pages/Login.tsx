@@ -76,7 +76,7 @@ export const Login = () => {
         //   setLoginError("Unexpected error");
         // }
         // setLoginError(err.response.data ?? 'Unexpected error') -> krotsza wersja przykładu wyzej
-        showErrorAlert(err.response.data ?? "Unexpected error");
+        showErrorAlert((err as unknown as Error).message ?? "Unexpected error");
         /*
         setLoginError(err.response.data ? err.response.data : 'Unexpected error')
         */
@@ -119,7 +119,7 @@ export const Login = () => {
           <Button type="submit" variant="contained" color="success">
             Login
           </Button>
-        {/* <Alert variant="outlined" severity="error">
+          {/* <Alert variant="outlined" severity="error">
         {loginError} </Alert>
         </>
         )}
@@ -130,7 +130,6 @@ export const Login = () => {
          </Alert>
           </>
         )} */}
-
         </form>
 
         <Button onClick={goBack} variant="outlined">

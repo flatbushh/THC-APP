@@ -30,7 +30,6 @@ export /*
     - Zrobic autentykacje JWT*
 5. Zrobic ProtectedRoutes, czyli podstrony tylko dla zalogowanych uzytkownikow
 */
-
 /*
 Plan dzialania:
 1. Na kazde zadanie tworzymy oddzielny branch gita (git checkout -b <moja_nazwa_brancha> np: create-register)
@@ -38,19 +37,11 @@ Plan dzialania:
 3. Jak mamy approve to robimy merge
 */ {};
 
-
 /*
 1. Musimy przesunac AddProduct do ekranu po zalogowaniu DONE bez JWT
     - Musze stworzyc dashboard (nowa podstrona) DONE
     - bedzie ona zablokowana tylko dla zalogowanych uzytkownikow* (JWT)
     - tutaj musimy przesunac nasza podstrone(juz nie tylko button) add product (tez zablokowane) DONE
-    howto:
-    - robimy nowa podstrone np o nazwie Dashbaord (moze byc pusta, zostaw jakis tekst typu 'hello')
-    - dodajemy ja do naszego Routera
-    - robimy automatyczne przekierowanie na Dashboard po zalogowaniu ------> DODAŁEM NAVIGATE  W ONSUBNMIT
-    - Na stronie powinien byc po lewej stronie Drawer (https://mui.com/material-ui/react-drawer/)
-    - w Drawerze powinno byc Menu, w ktorym dodamy sobie na razie jeden element: 'Add Product'
-    - Po kliknieciu w Add Product w menu przekierowuje do forma
 2. Userzy.
     - musimy zrobic nowy endpoint do pobierania wszystkich userow
     - musimy zrobic nowa podstrone Users i dodac ja w Routerze oraz Menu Drawera DONE
@@ -68,20 +59,29 @@ Plan dzialania:
     3. Robimy nowy endpoint o nazwie 'assign-role/:id', gdzie :id jest id usera, ktoremu zmieniamy role.
         - w body requestu musimy przekazac informacje o roli, ktora chcemy przypisac userowi
         - wykonujemy request do bazy gdzie podmieniamy poprzednia role na ta wyslana w req.body
-    4. Na froncie robimy nowa podstrone '/assign-role'
-        - mamy do wyboru dwie role (nie moze miec przypisanych dwoch jednoczesnie, 
-            oraz nie moze wybrac tej, ktora juz aktualnie ma przypisana): ADMIN i CLIENT
-        - wybieramy role, ktora chcemy przypisac i wysylamy request na endpoint z punktu 3.
-        -* powinnismy zaznaczyc w jakis sposob (np MUI Badge, albo kolorem jakkolwiek), ktora role aktualnie posiada user
-        - po zmianie tej roli, powinnismy pobrac jeszcze raz dane usera i zaznaczyc nowa wybrana jako aktualna 
-        - wysylanie requestu musi uwzgledniac obsluge bledow (nasze alert context)
+    --------------------------------------------------------------------------------------------
+    4. Na froncie robimy nowa podstrone '/assign-role' DONE
+        - mamy do wyboru dwie role (nie moze miec przypisanych dwoch jednoczesnie, DONE
+            oraz nie moze wybrac tej, ktora juz aktualnie ma przypisana): ADMIN i CLIENT (??)
+        - wybieramy role, ktora chcemy przypisac i wysylamy request na endpoint z punktu 3. DONE
+        -* powinnismy zaznaczyc w jakis sposob (np MUI Badge, albo kolorem jakkolwiek), ktora role aktualnie posiada user (zrobić nową kolumnę w datagrid w users gdzie bedzie wyswietlany badge?)
+        - po zmianie tej roli, powinnismy pobrac jeszcze raz dane usera i zaznaczyc nowa wybrana jako aktualna ???
+        - wysylanie requestu musi uwzgledniac obsluge bledow (nasze alert context) DONE
         sugestia: wykorzystac do stworzenia tego MUICard, powinien byc jakis header, a do wyboru roli moga nam posluzyc:
         Button, Checkbox, Switch ktore najbardziej Ci pasuje
     5. W tablie Users powinny byc dwa przyciski:
-        a). Przekierowanie do /assign-role strony z punktu 4
+        a). Przekierowanie do /assign-role strony z punktu 4 DONE
     --------------------------------------------------------------------------------------------
-        b). UserPreview -> nowa podstrona z podgladem usera
-            - ma wyswietlac dane usera, ktore posiadamy (poszukaj na dribble.com)
+        b). UserPreview -> nowa podstrona z podgladem usera DONE
+            - ma wyswietlac dane usera, ktore posiadamy (poszukaj na dribble.com) DONE
+            (1. stworzyłem endpoint na backendzie
+            2. stworzylem MuiCard wyswietlajacy id email i rolę usera)
+    6. Zrobic ProtectedAdminRoute
+        - guard na route, ktory pozwala tylko adminowi na odwiedzenie strony
+        - To jest wrapper pod react-router-dom, ktory w jakis sposob musi walidowac Twoja role i na jej podstawie zwracac
+        albo strone, ktora chcesz zobaczyc, albo nowa podstrone: NoAccessPage (zwykla statyczna strona z informacja, ze nie 
+            masz dostepu)
+
 
 *********
 later:

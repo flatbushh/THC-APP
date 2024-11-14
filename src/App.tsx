@@ -15,6 +15,8 @@ import { Dashboard } from "./Pages/Dashboard";
 import { Users } from "./Pages/Users";
 import { Drawer } from "./components/Drawer/Drawer";
 import { MainLayout } from "./layouts/MainLayout";
+import { AssignRole } from "./Pages/AssignRole";
+import { UserPreview } from "./Pages/UserPreview";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="users" element={<Users />} />
                 <Route path="add-product" element={<ProductForm />} />
+                <Route path="/assign-role/:id" element={<AssignRole />} />
+                <Route path="/user-preview/:id" element={<UserPreview />} />
               </Route>
 
               <Route path="product/:id" element={<ProductPreview />} />
