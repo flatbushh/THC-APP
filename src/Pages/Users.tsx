@@ -3,11 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { Badge, Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-interface User {
-  id: string;
-  email: string;
-}
+import { User } from "../types/User";
 
 export const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -15,13 +11,15 @@ export const Users = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/users"); //pobieram listę user'ów
-        setUsers(response.data); // przypisuję dane userów do zmiennej users z useState (mappedUsers)
-      } catch (err) {
-        setError(true);
-      }
+    const fetchUsers = () => {
+      axios
+        .get("http://localhost:4000/users")
+        .then((response) => {
+          setUsers(response.data); // Assign fetched data to the state
+        })
+        .catch((err) => {
+          setError(true); // Handle errors
+        });
     };
 
     fetchUsers();

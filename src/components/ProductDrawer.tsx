@@ -190,11 +190,6 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
           {FILTER_NAMES.map((filter, index) => (
             <ListItem key={index}>
               <ListItemIcon>{switchTerpenIcon(filter)}</ListItemIcon>
-              {/* <ListItemText>{filter}</ListItemText> */}
-              {/* w tym miejscu wywolujemy wbudowana funkcje map na arrayu
-              FILTER_NAMES. Zwracamy sobie JSX.Element (html). Na Chekboxie wykorzystujac
-              jego wbudowane propsy, wywolujemy nasza funkcje filterProducts na onChange i podajemy do niego nasz filter
-              ktory jest tak na prawde nazwa terpenu jako argument */}
               <Box sx={{ flexGrow: 1 }}></Box>
               {<Checkbox onChange={() => filterElements("terpen", filter)} />}
             </ListItem>

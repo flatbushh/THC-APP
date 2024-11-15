@@ -19,12 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-interface User {
-  id: string;
-  email: string;
-  role: string;
-}
+import { User } from "../types/User";
+import { Role } from "../types/Role";
 
 const assignRoleSchema = object({
   email: string().email().required(),
@@ -33,13 +29,11 @@ const assignRoleSchema = object({
 
 type FormValues = {
   email: string;
-  role: "CLIENT" | "ADMIN";
+  role: Role;
 };
 
 export const AssignRole = () => {
   const [users, setUsers] = useState<User[]>([]); // State to store users
-  // const [selectedEmail, setSelectedEmail] = useState<string>(""); //przechowywanie wybranego usera
-  // const [selectedRole, setSelectedRole] = useState<string>(""); //przechowywanie wybranej roli
   const { showErrorAlert, showSuccessAlert } = useAlertContext();
   const navigate = useNavigate();
 
@@ -71,79 +65,12 @@ export const AssignRole = () => {
     fetchUsers();
   }, []);
 
-  // const handleUserSelection = (event: SelectChangeEvent<string>) => {
-  //   setSelectedEmail(event.target.value);
-  // };
-
-  // const handleRoleSelection = (event: SelectChangeEvent<string>) => {
-  //   setSelectedRole(event.target.value);
-  // };
-
-  // przypisanie roli
-  // const assignRole = async () => {
-  //   if (!selectedEmail) {
-  //     showErrorAlert("Please select a user!");
-  //     return;
-  //   }
-  //   if (!selectedRole) {
-  //     showErrorAlert("Please select a role!");
-  //     return;
-  //   }
-
-  //   // szukam user'a po wybranym emailu, sprawdza, który email jest taki sam z wybranym (state variable), zwraca obiekt ze znalezionym userem
-  //   //const selectedUser = {id: user.id, email: user.email, role: user.role}
-  //   const selectedUser = users.find((user) => user.email === selectedEmail);
-  //   //ten if dlatego, ze user moe być undefined
-  //   if (!selectedUser) {
-  //     showErrorAlert("User not found!");
-  //     return;
-  //   }
-  //   // sprawdzam czy nowo przypisana rola jest taka sama jak ta co aktualnie przypisuję
-  //   console.log(selectedUser);
-  //   console.log(selectedRole);
-  //   if (selectedUser.role === selectedRole) {
-  //     showErrorAlert(
-  //       "The selected role has already been assigned to this user!"
-  //     );
-  //     return;
-  //   }
-
-  //   try {
-  //     // wysyłam na backend przypisaną rolę z ID wybranego user'a, w URL
-  //     await axios.post(`http://localhost:4000/assign-role/${selectedUser.id}`, {
-  //       //jak robię samo id z useParams to mając w URL id danego usera tylko jego rolę mogę zmienic
-  //       role: selectedRole,
-  //     });
-  //     showSuccessAlert("Role assigned successfully!");
-
-  //     await fetchUsers(); // po zmianie roli pobieram jeszcze raz dane usera ???
-
-  //     // //  szukam updatedUser po emailu po ponownym pobraniu userów
-  //     // const updatedUser = users.find((user) => user.email === selectedEmail);
-
-  //     // if (updatedUser) {
-  //     //   setSelectedRole(updatedUser.role); // zaznaczyc nowa wybrana jako aktualna
-  //     // }
-  //   } catch (err) {
-  //     //przypisałem typ, poniewa w przeciwnym razie nie mam dostepu do err.response.data
-  //     //otypowałem jako any, poniewaz w przeciwnym razie nie mogłem dostać sie do err.response.data,
-  //     //jak korzystalem z useForm np w komponencie Login nie było tego problemu,
-  //     showErrorAlert((err as Error).message ?? "Unexpected error");
-  //   }
-  // };
   const assignRole = async (data: FormValues) => {
     const { email, role } = data;
 
     const selectedUser = users.find((user) => user.email === email);
     if (!selectedUser) {
       showErrorAlert("User not found!");
-      return;
-    }
-
-    if (selectedUser.role === role) {
-      showErrorAlert(
-        "The selected role has already been assigned to this user!"
-      );
       return;
     }
 

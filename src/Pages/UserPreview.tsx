@@ -4,12 +4,7 @@ import { Box, Typography, Button, Card, CardContent } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { Spinner } from "../components/Spinner";
 import { useAlertContext } from "../context/AlertContext";
-
-interface User {
-  id: string;
-  email: string;
-  role: string;
-}
+import { User } from "../types/User";
 
 export const UserPreview = () => {
   const { id } = useParams<{ id: string }>();
