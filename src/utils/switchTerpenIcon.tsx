@@ -14,7 +14,7 @@ export const switchTerpenIcon = (terpenType: TerpenEnum) => {
     case TerpenEnum.LIMONEN:
       return (
         <StyledBox>
-          <SpaIcon sx={{ color: "yellow" }} />
+          <SpaIcon sx={{ color: "orange" }} />
           {`${TerpenEnum.LIMONEN.charAt(
             0
           ).toUpperCase()}${TerpenEnum.LIMONEN.slice(1)}`}

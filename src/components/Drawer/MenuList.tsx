@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   List,
   ListItem,
@@ -21,15 +22,15 @@ export const MenuList = () => {
   return (
     <List>
       {MENU_LIST.map((item) => (
-        <>
-          <ListItem>
+        <div key={item.label}>
+          <ListItem disablePadding>
             <ListItemButton onClick={() => navigate(item.url)}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />
             </ListItemButton>
           </ListItem>
           <Divider />
-        </>
+        </div>
       ))}
     </List>
   );
