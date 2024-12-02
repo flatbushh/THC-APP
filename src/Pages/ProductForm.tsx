@@ -21,6 +21,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TerpenEnum } from "../types/Terpen";
 import { GeneticsEnum } from "../types/GeneticsEnum";
+import { useToken } from "../hooks/useToken";
 
 const productSchema = object({
   producentName: string().min(4).max(20).required("This field is required"),
@@ -55,6 +56,7 @@ const CustomCard = styled(Card)({
 
 export const ProductForm = () => {
   const navigate = useNavigate();
+  const { token } = useToken();
   /* przypisujemy hooka useNavigate to zmiennej - jest to funkcja sluzy ona do przekierowania do okreslonej strony
    jako argument przyjmuje jej adres, czyli path okreslony w App.tsx w konkretnym Routcie */
 
@@ -120,7 +122,9 @@ export const ProductForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     await axios
-      .post("http://localhost:4000/create-product", data) // {} => to jest body ( tu dodac body frontend)
+      .post("http://localhost:4000/create-product", data, {
+        headers: { Authorization: token },
+      }) // {} => to jest body ( tu dodac body frontend)
       .then(() => {
         navigate("/");
         console.log(data);

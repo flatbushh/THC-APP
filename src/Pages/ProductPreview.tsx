@@ -96,6 +96,7 @@ export const ProductPreview = () => {
           <Button onClick={goBack} variant="outlined">
             Back
           </Button>
+          <Button>Edit</Button>
         </CardContent>
       </Card>
     </StyledBox>

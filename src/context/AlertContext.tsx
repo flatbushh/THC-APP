@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  FC,
-  PropsWithChildren,
-} from "react";
+import { createContext, useContext, PropsWithChildren } from "react";
 import { Slide, toast, ToastOptions } from "react-toastify";
 
 interface AlertContextType {

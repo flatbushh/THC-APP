@@ -79,6 +79,9 @@ export const Users = () => {
     <div style={{ height: 400, width: "100%" }}>
       {error && <p>something went wrong</p>}
       <DataGrid rows={rows} columns={columns} />
+      <Button variant="contained" color="error" onClick={() => navigate("/")}>
+        Back to home page
+      </Button>
     </div>
   );
 };

@@ -1,20 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  styled,
-} from "@mui/material";
+import { Button, Card, CardContent, TextField, styled } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { number, object, ref, string } from "yup";
+import { object, string } from "yup";
 import { useAlertContext } from "../context/AlertContext";
+import { useAuthContext } from "../context/AuthContext";
+import { useToken } from "../hooks/useToken";
 
 const registerSchema = object({
   email: string().email("Invalid email").required("Email is required"),
@@ -40,8 +32,7 @@ const CustomCard = styled(Card)({
 });
 
 export const Login = () => {
-  // const [loginError, setLoginError] = useState<string | null>(null);
-  // const [loggedIn, setLogggedIn] = useState<boolean>(false);
+  const { setUser } = useAuthContext(); // Access setUser to update the context
 
   const { showErrorAlert, showSuccessAlert } = useAlertContext();
   const {
@@ -60,29 +51,37 @@ export const Login = () => {
     navigate("/");
   };
 
+  const { setToken } = useToken();
+
   const onSubmit = async (data: FormValues) => {
     await axios
       .post("http://localhost:4000/login", data)
-      .then(() => {
-        // setLogggedIn(true)
-        showSuccessAlert("logged in");
-        navigate("/dashboard");
-        //navigate("/");
+      .then((response) => {
+        const user = response.data.user;
+        const token = response.data.token;
+
+        setToken(token); //The token from the response is saved using useToken.
+        localStorage.setItem("userId", user.id); // Store userId in localStorage -- dodane //After a successful login, the user's id is saved in localStorage
+        setUser(user); //setUser updates the AuthContext with the logged-in user’s details.
+        showSuccessAlert("Logged in successfully");
+
+        if (user.role === "ADMIN") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
       })
       .catch((err) => {
-        // if (err.response && err.response.data) { //skoro to jest async/await to czemu nie robimy tegow try/catch
-        //   setLoginError(err.response.data);
-        // } else {
-        //   setLoginError("Unexpected error");
-        // }
-        // setLoginError(err.response.data ?? 'Unexpected error') -> krotsza wersja przykładu wyzej
-        showErrorAlert((err as unknown as Error).message ?? "Unexpected error");
-        /*
-        setLoginError(err.response.data ? err.response.data : 'Unexpected error')
-        */
+        showErrorAlert(
+          (err.response?.data?.message as string) ?? "Unexpected error"
+        );
       });
   };
 
+  //The API responds with user and token.
+  // userId (from the user object) is stored in localStorage.
+  // token is saved via the useToken hook.
+  // The user object is passed to AuthContext via setUser.
   return (
     <CustomCard>
       <CardContent>

@@ -73,6 +73,12 @@ export const AssignRole = () => {
       showErrorAlert("User not found!");
       return;
     }
+    if (selectedUser.role === role) {
+      showErrorAlert(
+        "The selected role has already been assigned to this user!"
+      );
+      return;
+    }
 
     try {
       await axios.post(`http://localhost:4000/assign-role/${selectedUser.id}`, {
