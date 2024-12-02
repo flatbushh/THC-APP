@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const { token } = useToken();
 
-  useEffect(() => {
+  useEffect(() => { //context siczyści się po odświeeniu strony, dlatego korzystam z useEffect
     const initializeAuth = async () => {
       if (token) {
         const userId = localStorage.getItem("userId");
