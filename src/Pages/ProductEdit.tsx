@@ -1,37 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { object, string, number, date, InferType, mixed } from "yup";
+import { object, string, number } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   Divider,
-  Grid,
   TextField,
   Typography,
+  MenuItem,
   styled,
 } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TerpenEnum } from "../types/Terpen";
 import { GeneticsEnum } from "../types/GeneticsEnum";
 import { useToken } from "../hooks/useToken";
+import { Spinner } from "../components/Spinner";
 
 const productSchema = object({
   producentName: string().min(4).max(20).required("This field is required"),
   strainName: string().min(4).max(20).required("This field is required"),
   genetics: string().min(4).max(15).required(),
   terpen: string().required(),
-  thcLevel: number().positive().integer().min(1)
-  .required(),
-  cbdLevel: number().positive().integer().min(1)
-  .required(),
+  thcLevel: number().positive().integer().min(1).required(),
+  cbdLevel: number().positive().integer().min(1).required(),
   description: string().required(),
 });
 
@@ -54,83 +49,107 @@ const CustomCard = styled(Card)({
   flexWrap: "wrap",
 });
 
-export const ProductForm = () => {
+export const ProductEdit = () => {
+  const { id } = useParams(); // pobieram ID z URL
   const navigate = useNavigate();
-  const { token } = useToken();
-  /* przypisujemy hooka useNavigate to zmiennej - jest to funkcja sluzy ona do przekierowania do okreslonej strony
-   jako argument przyjmuje jej adres, czyli path okreslony w App.tsx w konkretnym Routcie */
 
+  const [product, setProduct] = useState<FormValues | null>(null);
   const [terpenOptions, setTerpenOptions] = useState<
     { label: string; value: string }[]
   >([]);
   const [geneticsOptions, setGeneticsOptions] = useState<
     { label: string; value: string }[]
   >([]);
-  const defaultValues: FormValues = {
-    producentName: "",
-    strainName: "",
-    genetics: GeneticsEnum.INDICA,
-    terpen: TerpenEnum.CARIOPHILEN,
-    thcLevel: 0,
-    cbdLevel: 0,
-    description: "",
-  };
+
   const form = useForm<FormValues>({
     resolver: yupResolver(productSchema),
     mode: "all",
-    defaultValues,
+    defaultValues: {
+      producentName: "",
+      strainName: "",
+      genetics: GeneticsEnum.INDICA,
+      terpen: TerpenEnum.CARIOPHILEN,
+      thcLevel: 0,
+      cbdLevel: 0,
+      description: "",
+    },
   });
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = form;
-  const mapTerpenEnumToOptions = () => {
-    const array = Object.keys(TerpenEnum).map((terpen) => ({
-      label: terpen.toLocaleUpperCase(),
-      value: terpen.toLocaleLowerCase(),
-    }));
-
-    setTerpenOptions(array);
-  };
-
-  const mapGeneticsEnumToOptions = () => {
-    const array = Object.keys(GeneticsEnum).map((genetic) => ({
-      label: genetic.toLocaleUpperCase(),
-      value: genetic.toLocaleLowerCase(),
-    }));
-
-    setGeneticsOptions(array);
-  };
 
   useEffect(() => {
+    // pobieram produktt po ID
+    const fetchProductData = () => {
+      axios
+        .get(`http://localhost:4000/product/${id}`)
+        .then((response) => {
+          const product = response.data;
+          setProduct(product);
+          // ustawiam w formie pobrane dane z backendu jako defaultowe
+          setValue("producentName", product.producentName); //Updatin the "description" field in the form with the description property from the fetched product data
+          setValue("strainName", product.strainName);
+          setValue("genetics", product.genetics);
+          setValue("terpen", product.terpen);
+          setValue("thcLevel", product.thcLevel);
+          setValue("cbdLevel", product.cbdLevel);
+          setValue("description", product.description);
+        })
+        .catch((error) => {
+          console.error("Error fetching product", error);
+        });
+    };
+    const mapTerpenEnumToOptions = () => {
+      const array = Object.keys(TerpenEnum).map((terpen) => ({
+        label: terpen.toUpperCase(),
+        value: terpen.toLowerCase(),
+      }));
+      setTerpenOptions(array);
+    };
+
+    const mapGeneticsEnumToOptions = () => {
+      const array = Object.keys(GeneticsEnum).map((genetic) => ({
+        label: genetic.toUpperCase(),
+        value: genetic.toLowerCase(),
+      }));
+      setGeneticsOptions(array);
+    };
+
+    fetchProductData();
     mapTerpenEnumToOptions();
     mapGeneticsEnumToOptions();
-  }, []);
-
-  /*
-  1. Hook useForm moze przyjmowac przeroznce opcje, najwazniejsze z nich:
-    - resolver -> czyli funkcja/mechanizm, ktory przyjmuje jakas schema (productSchema). Pozwala to na
-    walidacje konkretnych pol w sposob taki jak my to sobie okreslimy. https://www.npmjs.com/package/yup -> dokumnetacja yupa
-    tam znajdziesz wszelkie opcje, jak mozemy walidowac inputy
-    - mode -> kiedy walidacja ma sie odpalac (opcje zobaczysz po najechaniu), all jest najwygodniejsze
-    - defaultValues -> defaultowe wartosci dla formularza
-    2. useForm zwraca obinmularza na podstawie kontrolowanych do niego danych
-    - formState -> stan fomularza (taki troche formulrzowy useState), jest obiektem, zawiera w sobie miedzyinnymi co istotne errors
-  */
+  }, [id]);
 
   const onSubmit = async (data: FormValues) => {
-    await axios
-      .post("http://localhost:4000/create-product", data, {})
-      .then(() => {
-        navigate("/");
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //data --> dane wprowadzone w textfieldach
+
+    const updatedProduct = {
+      producentName: data.producentName.toLowerCase(),
+      strainName: data.strainName,
+      genetics: data.genetics,
+      thcLevel: data.thcLevel,
+      cbdLevel: data.cbdLevel,
+      terpen: data.terpen,
+      description: data.description,
+    };
+
+    try {
+      // wysyłam Patch request aby zaktualizować produkt
+      await axios.patch(
+        `http://localhost:4000/edit-product/${id}`,
+        updatedProduct
+      );
+      navigate(`/product-preview/${id}`);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  if (!product) return <Spinner />;
 
   return (
     <Box
@@ -153,39 +172,33 @@ export const ProductForm = () => {
               flexDirection: "column",
             }}
           >
-            <Typography
-              sx={{ margin: "20px", fontFamily: "BlinkMacSystemFont" }}
-              variant="h4"
-              component="div"
-              gutterBottom
-            >
-              Add new product
+            <Typography variant="h4" component="div" gutterBottom>
+              Edit Product
             </Typography>
 
             <TextField
               sx={{ margin: "20px", width: "90%" }}
-              label={"Producent name"}
+              label="Producent name"
               {...register("producentName")}
               error={!!errors.producentName}
-              helperText={
-                errors.producentName ? errors.producentName.message : ""
-              }
+              helperText={errors.producentName?.message}
             />
 
             <TextField
               sx={{ margin: "20px", width: "90%" }}
-              label={"Strain name"}
+              label="Strain name"
               {...register("strainName")}
               error={!!errors.strainName}
-              helperText={errors.strainName ? errors.strainName.message : ""}
+              helperText={errors.strainName?.message}
             />
+
             <TextField
               sx={{ margin: "20px", width: "90%" }}
               select
-              label={"Genetics"}
+              label="Genetics"
               {...register("genetics")}
               error={!!errors.genetics}
-              helperText={errors.genetics ? errors.genetics.message : ""}
+              helperText={errors.genetics?.message}
             >
               {geneticsOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -196,18 +209,20 @@ export const ProductForm = () => {
 
             <TextField
               sx={{ margin: "20px", width: "90%" }}
-              label={"THC"}
+              label="THC"
               {...register("thcLevel")}
               error={!!errors.thcLevel}
-              helperText={errors.thcLevel ? errors.thcLevel.message : ""}
+              helperText={errors.thcLevel?.message}
             />
+
             <TextField
               sx={{ margin: "20px", width: "90%" }}
-              label={"CBD"}
+              label="CBD"
               {...register("cbdLevel")}
               error={!!errors.cbdLevel}
-              helperText={errors.cbdLevel ? errors.cbdLevel.message : ""}
+              helperText={errors.cbdLevel?.message}
             />
+
             <TextField
               sx={{ margin: "20px", width: "90%" }}
               select
@@ -235,13 +250,18 @@ export const ProductForm = () => {
 
             <Divider sx={{ borderColor: "black", borderStyle: "solid" }} />
             <Box display="flex" gap={2}>
-              <Button type="submit" variant="contained" color="success">
-                Add product
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                onClick={() => navigate(`/`)}
+              >
+                Save Changes
               </Button>
               <Button
                 variant="contained"
                 color="error"
-                onClick={() => navigate("/")}
+                onClick={() => navigate(`/`)}
               >
                 Cancel
               </Button>

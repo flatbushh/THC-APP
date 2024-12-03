@@ -70,13 +70,17 @@ export const ProductPreview = () => {
         >
           <Box>
             <Typography gutterBottom variant="h5" component="div">
-              {product.producentName}
               {product.strainName}
+            </Typography>
+            <Typography gutterBottom variant="h5" component="div">
+              {product.producentName}
             </Typography>
           </Box>
           <Box mt={2}>
             <Typography variant="h6" component="div" color="#348feb">
               {product.genetics}
+            </Typography>
+            <Typography variant="h6" component="div" color="#348feb">
               {product.terpen}
             </Typography>
           </Box>
@@ -84,7 +88,7 @@ export const ProductPreview = () => {
           <CardMedia
             component="img"
             height="500"
-            image="https://www.rollingstone.com/wp-content/uploads/2018/06/rs-3896-rectangle.jpg?w=624&h=420&crop=1"
+            image="https://odmianymarihuany.pl/wp-content/uploads/2023/04/aurora-delahaze-22-1.jpg"
             alt="Strain photo"
           />
 
@@ -93,14 +97,18 @@ export const ProductPreview = () => {
               {product.description}
             </Typography>
           </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(`/edit-product/${id}`)}
+          >
+            Edit
+          </Button>
           <Button onClick={goBack} variant="outlined">
             Back
           </Button>
-          <Button>Edit</Button>
         </CardContent>
       </Card>
     </StyledBox>
   );
 };
-//nie wiem jak przekazać producent, strain, terpen i genetics i jak zrobic description skoro dla wszystkich produktów będzie innne
-//const [products, setProducts] = useState<Product[]>([]);

@@ -15,6 +15,7 @@ import { UserPreview } from "./Pages/UserPreview";
 import { ProtectedAdminRoutes } from "./layouts/ProtectedRoutes";
 import { AuthProvider } from "./context/AuthContext";
 import { NoAccessPage } from "./Pages/NoAccessPage";
+import { ProductEdit } from "./Pages/ProductEdit";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                     <Route path="add-product" element={<ProductForm />} />
                     <Route path="/assign-role/:id" element={<AssignRole />} />
                     <Route path="/user-preview/:id" element={<UserPreview />} />
+                    <Route path="/edit-product/:id" element={<ProductEdit />} />
                   </Route>
                 </Route>
               </Routes>

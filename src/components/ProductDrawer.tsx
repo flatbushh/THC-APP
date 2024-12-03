@@ -38,6 +38,7 @@ import { GeneticsEnum } from "../types/GeneticsEnum";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { geneticsFilters, terpenFilters } from "./checkboxFilterConfig";
+import { useAuthContext } from "../context/AuthContext";
 
 const drawerWidth = 240;
 
@@ -136,30 +137,58 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
   // };
 
   const navigate = useNavigate();
+  const { logout } = useAuthContext();
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Filtry
-          </Typography>
+        <Toolbar
+          sx={{
+            display: "flex", // Enable flexbox
+            justifyContent: "space-between", // Space between left and right items
+            alignItems: "center", // Center items vertically
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              Filtry
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", gap: 1, marginLeft: "auto" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate("/register")}
+            >
+              Register
+            </Button>
+
+            <Button variant="contained" color="primary" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Box>
         </Toolbar>
-        <Button variant="contained" onClick={() => navigate("/register")}>
-          Register
-        </Button>
-        <Button variant="contained" onClick={() => navigate("/login")}>
-          Login
-        </Button>
       </AppBar>
 
       <Drawer
@@ -185,7 +214,6 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
           </IconButton>
         </DrawerHeader>
 
-        <Divider />
         <List>
           {FILTER_NAMES.map((filter, index) => (
             <ListItem key={index}>

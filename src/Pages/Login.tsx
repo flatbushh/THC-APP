@@ -60,9 +60,10 @@ export const Login = () => {
         const user = response.data.user;
         const token = response.data.token;
 
-        setToken(token); //The token from the response is saved using useToken.
-        localStorage.setItem("userId", user.id); // Store userId in localStorage -- dodane //After a successful login, the user's id is saved in localStorage
+        setToken(token); //The token from the response is saved using useToken. ustawiam Token na ten otrzymany z bazy
         setUser(user); //setUser updates the AuthContext with the logged-in user’s details.
+        localStorage.setItem("userId", user.id); // After a successful login, the user's id is saved in localStorage
+        localStorage.setItem("userRole", user.role);
         showSuccessAlert("Logged in successfully");
 
         if (user.role === "ADMIN") {

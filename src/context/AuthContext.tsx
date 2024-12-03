@@ -19,6 +19,7 @@ interface User {
 interface AuthContextType {
   user: User | null; // The authenticated user or null
   setUser: (user: User | null) => void; // Function to update the user
+  logout: () => void;
 }
 
 //za pomoca createContext tworzymy context
@@ -28,37 +29,71 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null); // Holds the current user
 
-  const { token } = useToken();
+  const { token, validateToken, removeToken } = useToken();
 
-  useEffect(() => { //context siczyści się po odświeeniu strony, dlatego korzystam z useEffect
+  const logout = () => {
+    setUser(null);
+    removeToken();
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userRole");
+  };
+
+  useEffect(() => {
     const initializeAuth = async () => {
-      if (token) {
-        const userId = localStorage.getItem("userId");
-        //If a token exists, it retrieves the userId from localStorage and sends a request to the server to get user information.
+      if (!token) return; // exit jesli token nie istnieje
 
-        if (userId) {
-          try {
-            const response = await axios.get(
-              `http://localhost:4000/user/${userId}` // Endpoint to fetch user data,
-            );
-            setUser(response.data); // Set user in AuthContext //The fetched user data is stored in the context so it can be used across the app.
-          } catch (err) {
-            console.error("Error fetching user data", err);
-          }
-        }
+      const isTokenValid = await validateToken(token);
+      if (!isTokenValid) {
+        console.log("Token is not valid");
+        return; // Exit jesli token nie jest valid
+      }
+
+      const userId = localStorage.getItem("userId");
+      if (!userId) return; // Exit jesli nie ma userID w localstorage
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/user/${userId}`
+        );
+        setUser(response.data);
+      } catch (err) {
+        console.error("Error fetching user data", err);
       }
     };
 
     initializeAuth();
   }, [token]);
 
-  //  Checks for a token in localStorage.
-  // Retrieves the userId from localStorage.
-  // Makes an API call to get user information.
-  // Stores the user data in AuthContext for other parts of the app to us
+  //   useEffect(() => {
+  //     //context czyści się po odświeeniu strony, dlatego korzystam z useEffect
+  //     //przerob to zeby bazowalo na zaprzeczeniach, a nie na pozytywach
+  //     const initializeAuth = async () => {
+  //       if (token) {
+  //         const isTokenValid = await validateToken(token);
+  //         console.log(isTokenValid);
+  //         if (!isTokenValid) {
+  //           console.log("not valid");
+  //         }
+  //         const userId = localStorage.getItem("userId"); //zaktualizowane z  Login
+  //         // front -> backend =>
+  //         // endpoint => middleware => controller (nasza funkcja)
+  //         if (userId) {
+  //           try {
+  //             const response = await axios.get(
+  //               `http://localhost:4000/user/${userId}` // Endpoint pobierający dane uzytkownika o okręslonym ID
+  //             );
+  //             setUser(response.data); // Set user in AuthContext,  The fetched user data is stored in the context so it can be used across the app.
+  //           } catch (err) {
+  //             console.error("Error fetching user data", err);
+  //           }
+  //         }
+  //       }
+  //     };
+
+  //     initializeAuth();
+  //   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

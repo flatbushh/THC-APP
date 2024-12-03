@@ -12,5 +12,5 @@ export const Container = styled("div")({
   alignItems: "center",
   justifyContent: "center",
   background: "#e8e2da",
-  padding: 50,
+  padding: 30,
 });

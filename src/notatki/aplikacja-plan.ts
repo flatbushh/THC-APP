@@ -60,7 +60,7 @@ Wynika z tego, ze powinnismy byc zalogowani, niestety po refreshu czysci sie con
 
 1. Podczas logowania musimy dodac do localStorage'a userId DONE
     - alternatywna opcja- mozesz rozszyfrowac token i wyciagnac userId z tokenu
-2. W AuthContext musimy ustawic useEffect z warunkiem
+2. W AuthContext musimy ustawic useEffect z warunkiem DONE
     - jesli mamy token (wyciagamy go za pomoca naszego hooka)
         to: 
         - wyciagamy z localStorage userId
@@ -69,5 +69,6 @@ Wynika z tego, ze powinnismy byc zalogowani, niestety po refreshu czysci sie con
 
 AC (acceptance criteria):
 Jako zalogowany user po odswiezeniu strony dalej jestem zalogowany.
-3. Podglad produktu i jego edycja (mozesz wykorzystac istniejacy podglad i dodac button: Edit dla Admina);
+
+3. Podglad produktu i jego edycja (mozesz wykorzystac istniejacy podglad i dodac button: Edit dla Admina); DONE
 */
