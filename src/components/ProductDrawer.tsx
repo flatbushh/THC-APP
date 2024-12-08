@@ -184,15 +184,11 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
               Register
             </Button>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => navigate("/dashboard")}
-            >
-              Dashboard
+            <Button variant="contained" onClick={() => navigate("/dashboard")}>
+              Admin Dashboard
             </Button>
 
-            <Button variant="contained" color="primary" onClick={handleLogout}>
+            <Button variant="contained" color="error" onClick={handleLogout}>
               Logout
             </Button>
           </Box>
