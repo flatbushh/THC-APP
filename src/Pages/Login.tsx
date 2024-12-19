@@ -67,7 +67,7 @@ export const Login = () => {
         showSuccessAlert("Logged in successfully");
 
         if (user.role === "ADMIN") {
-          navigate("/dashboard");
+          navigate("/");
         } else {
           navigate("/");
         }

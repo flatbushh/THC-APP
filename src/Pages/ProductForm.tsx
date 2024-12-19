@@ -26,13 +26,19 @@ import { useToken } from "../hooks/useToken";
 const productSchema = object({
   producentName: string().min(4).max(20).required("This field is required"),
   strainName: string().min(4).max(20).required("This field is required"),
-  genetics: string().min(4).max(15).required(),
-  terpen: string().required(),
-  thcLevel: number().positive().integer().min(1)
-  .required(),
-  cbdLevel: number().positive().integer().min(1)
-  .required(),
-  description: string().required(),
+  genetics: string().min(4).max(15).required("This field is required"),
+  terpen: string().required("This field is required"),
+  thcLevel: number()
+    .positive()
+    .integer()
+    .min(1)
+    .required("This field is required"),
+  cbdLevel: number()
+    .positive()
+    .integer()
+    .min(1)
+    .required("This field is required"),
+  description: string().required("This field is required"),
 });
 
 type FormValues = {
@@ -122,7 +128,7 @@ export const ProductForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     await axios
-      .post("http://localhost:4000/create-product", data, {})
+      .post("http://localhost:4000/create-product", data)
       .then(() => {
         navigate("/");
         console.log(data);
@@ -183,6 +189,7 @@ export const ProductForm = () => {
               sx={{ margin: "20px", width: "90%" }}
               select
               label={"Genetics"}
+              value={""}
               {...register("genetics")}
               error={!!errors.genetics}
               helperText={errors.genetics ? errors.genetics.message : ""}
@@ -213,6 +220,7 @@ export const ProductForm = () => {
               select
               fullWidth
               label="Terpen"
+              value={""}
               {...register("terpen")}
               error={!!errors.terpen}
               helperText={errors.terpen?.message}

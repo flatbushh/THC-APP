@@ -106,6 +106,7 @@ export const AssignRole = () => {
               select
               fullWidth
               label="Select User"
+              value={""}
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email ? errors.email.message : ""}
@@ -124,6 +125,7 @@ export const AssignRole = () => {
               select
               fullWidth
               label="Select Role"
+              value={""}
               {...register("role")}
               error={!!errors.role}
               helperText={errors.role ? errors.role.message : ""}

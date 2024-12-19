@@ -13,10 +13,6 @@ export const ProtectedAdminRoutes: FC = () => {
     //przekieruj na stronę logowania jeśli uytkownik nie istnieje (nie jest uwierzytelniony) undefined
   }
 
-  // role powinno byc brane z localStorage
-  // - podczas logowania powinienes dodawac role do localStorage
-  // - tutaj powinien pobierac wartosc z localStorage
-  // - przy wylogowaniu usuwaj tez role
   if (role !== ALLOWED_ROLE) {
     // przekieruj do no-access jesli uytkownik nie ma przypiasnej odpwoiednije roli ( ta z propsa z App.tsx i ta z user'a po logowaniu)
     return <Navigate to="/no-access" />;

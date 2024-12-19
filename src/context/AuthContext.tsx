@@ -63,35 +63,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     initializeAuth();
   }, [token]);
 
-  //   useEffect(() => {
-  //     //context czyści się po odświeeniu strony, dlatego korzystam z useEffect
-  //     //przerob to zeby bazowalo na zaprzeczeniach, a nie na pozytywach
-  //     const initializeAuth = async () => {
-  //       if (token) {
-  //         const isTokenValid = await validateToken(token);
-  //         console.log(isTokenValid);
-  //         if (!isTokenValid) {
-  //           console.log("not valid");
-  //         }
-  //         const userId = localStorage.getItem("userId"); //zaktualizowane z  Login
-  //         // front -> backend =>
-  //         // endpoint => middleware => controller (nasza funkcja)
-  //         if (userId) {
-  //           try {
-  //             const response = await axios.get(
-  //               `http://localhost:4000/user/${userId}` // Endpoint pobierający dane uzytkownika o okręslonym ID
-  //             );
-  //             setUser(response.data); // Set user in AuthContext,  The fetched user data is stored in the context so it can be used across the app.
-  //           } catch (err) {
-  //             console.error("Error fetching user data", err);
-  //           }
-  //         }
-  //       }
-  //     };
-
-  //     initializeAuth();
-  //   }, [token]);
-
   return (
     <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}

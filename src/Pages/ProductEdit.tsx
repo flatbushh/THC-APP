@@ -17,17 +17,29 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { TerpenEnum } from "../types/Terpen";
 import { GeneticsEnum } from "../types/GeneticsEnum";
-import { useToken } from "../hooks/useToken";
 import { Spinner } from "../components/Spinner";
+import {
+  mapGeneticsEnumToOptions,
+  mapTerpenEnumToOptions,
+} from "../utils/mapEnumToOptions";
+import { useAlertContext } from "../context/AlertContext";
 
 const productSchema = object({
   producentName: string().min(4).max(20).required("This field is required"),
   strainName: string().min(4).max(20).required("This field is required"),
-  genetics: string().min(4).max(15).required(),
-  terpen: string().required(),
-  thcLevel: number().positive().integer().min(1).required(),
-  cbdLevel: number().positive().integer().min(1).required(),
-  description: string().required(),
+  genetics: string().min(4).max(15).required("This field is required"),
+  terpen: string().required("This field is required"),
+  thcLevel: number()
+    .positive()
+    .integer()
+    .min(1)
+    .required("This field is required"),
+  cbdLevel: number()
+    .positive()
+    .integer()
+    .min(1)
+    .required("This field is required"),
+  description: string().required("This field is required"),
 });
 
 type FormValues = {
@@ -52,16 +64,18 @@ const CustomCard = styled(Card)({
 export const ProductEdit = () => {
   const { id } = useParams(); // pobieram ID z URL
   const navigate = useNavigate();
+  const { showErrorAlert } = useAlertContext();
 
   const [product, setProduct] = useState<FormValues | null>(null);
-  const [terpenOptions, setTerpenOptions] = useState<
-    { label: string; value: string }[]
-  >([]);
-  const [geneticsOptions, setGeneticsOptions] = useState<
-    { label: string; value: string }[]
-  >([]);
+  const terpenOptions = mapTerpenEnumToOptions();
+  const geneticsOptions = mapGeneticsEnumToOptions();
 
-  const form = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
     resolver: yupResolver(productSchema),
     mode: "all",
     defaultValues: {
@@ -74,14 +88,6 @@ export const ProductEdit = () => {
       description: "",
     },
   });
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = form;
-
   useEffect(() => {
     // pobieram produktt po ID
     const fetchProductData = () => {
@@ -90,62 +96,49 @@ export const ProductEdit = () => {
         .then((response) => {
           const product = response.data;
           setProduct(product);
-          // ustawiam w formie pobrane dane z backendu jako defaultowe
-          setValue("producentName", product.producentName); //Updatin the "description" field in the form with the description property from the fetched product data
-          setValue("strainName", product.strainName);
-          setValue("genetics", product.genetics);
-          setValue("terpen", product.terpen);
-          setValue("thcLevel", product.thcLevel);
-          setValue("cbdLevel", product.cbdLevel);
-          setValue("description", product.description);
+          console.log("Fetched Product:", product);
+          const keys = Object.keys(product) as (keyof FormValues)[]; //[] bo powinien być array of keys a nie pojedynczy klucz
+          keys.forEach((key) => {
+            setValue(key, product[key]);
+          });
         })
-        .catch((error) => {
-          console.error("Error fetching product", error);
+
+        .catch((err) => {
+          showErrorAlert(
+            (err.response?.data?.message as string) ?? "Unexpected error"
+          ); //Instead of throwing an error when a property is null or undefined, it returns undefined for the whole expression up to that point.
         });
     };
-    const mapTerpenEnumToOptions = () => {
-      const array = Object.keys(TerpenEnum).map((terpen) => ({
-        label: terpen.toUpperCase(),
-        value: terpen.toLowerCase(),
-      }));
-      setTerpenOptions(array);
-    };
-
-    const mapGeneticsEnumToOptions = () => {
-      const array = Object.keys(GeneticsEnum).map((genetic) => ({
-        label: genetic.toUpperCase(),
-        value: genetic.toLowerCase(),
-      }));
-      setGeneticsOptions(array);
-    };
-
     fetchProductData();
-    mapTerpenEnumToOptions();
-    mapGeneticsEnumToOptions();
   }, [id]);
 
   const onSubmit = async (data: FormValues) => {
     //data --> dane wprowadzone w textfieldach
 
     const updatedProduct = {
+      ...data,
       producentName: data.producentName.toLowerCase(),
-      strainName: data.strainName,
-      genetics: data.genetics,
-      thcLevel: data.thcLevel,
-      cbdLevel: data.cbdLevel,
-      terpen: data.terpen,
-      description: data.description,
     };
 
     try {
       // wysyłam Patch request aby zaktualizować produkt
       await axios.patch(
         `http://localhost:4000/edit-product/${id}`,
-        updatedProduct
+        {
+          updatedProduct,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        } //req data
       );
-      navigate(`/product-preview/${id}`);
+
+      if (data) {
+        navigate(`/`);
+      }
     } catch (err) {
-      console.log(err);
+      showErrorAlert((err as Error).message ?? "Unexpected error");
     }
   };
 
@@ -196,6 +189,7 @@ export const ProductEdit = () => {
               sx={{ margin: "20px", width: "90%" }}
               select
               label="Genetics"
+              value={product ? product.genetics : ""}
               {...register("genetics")}
               error={!!errors.genetics}
               helperText={errors.genetics?.message}
@@ -228,6 +222,7 @@ export const ProductEdit = () => {
               select
               fullWidth
               label="Terpen"
+              value={product ? product.terpen : ""}
               {...register("terpen")}
               error={!!errors.terpen}
               helperText={errors.terpen?.message}
@@ -250,18 +245,13 @@ export const ProductEdit = () => {
 
             <Divider sx={{ borderColor: "black", borderStyle: "solid" }} />
             <Box display="flex" gap={2}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                onClick={() => navigate(`/`)}
-              >
+              <Button type="submit" variant="contained" color="success">
                 Save Changes
               </Button>
               <Button
                 variant="contained"
                 color="error"
-                onClick={() => navigate(`/`)}
+                onClick={() => navigate(`/product/${id}`)}
               >
                 Cancel
               </Button>

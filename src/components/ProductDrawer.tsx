@@ -137,7 +137,7 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
   // };
 
   const navigate = useNavigate();
-  const { logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -164,33 +164,54 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Filtry
+              Filters
             </Typography>
           </Box>
 
           <Box sx={{ display: "flex", gap: 1, marginLeft: "auto" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => navigate("/register")}
-            >
-              Register
-            </Button>
+            {/* Conditional rendering for Login and Register buttons */}
+            {!localStorage.getItem("userId") &&
+              !localStorage.getItem("token") && (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate("/login")}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => navigate("/register")}
+                  >
+                    Register
+                  </Button>
+                </>
+              )}
 
-            <Button variant="contained" onClick={() => navigate("/dashboard")}>
-              Admin Dashboard
-            </Button>
+            {/* Conditional rendering for Admin Dashboard button */}
+            {user?.role === "ADMIN" && ( //?. bo user moze byc null, wiec w ten sposob unikam bledu
+              <Button
+                variant="contained"
+                color="info"
+                onClick={() => navigate("/dashboard")}
+              >
+                Admin Dashboard
+              </Button>
+            )}
 
-            <Button variant="contained" color="error" onClick={handleLogout}>
-              Logout
-            </Button>
+            {/* Conditional rendering for Logout button */}
+            {localStorage.getItem("userId") &&
+              localStorage.getItem("token") && (
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              )}
           </Box>
         </Toolbar>
       </AppBar>

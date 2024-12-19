@@ -43,13 +43,11 @@ export const ProductPreview = () => {
     axios
       .get(`http://localhost:4000/product/${id}`)
       .then((res) => {
-        console.log(res.data);
         setProduct(res.data);
         setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
       });
   }, []);
 

@@ -198,7 +198,7 @@ export const ProductsList: FC = () => {
 
   return (
     <Container>
-      {loading ? <Spinner /> : null}{" "}
+      {loading && <Spinner />}
       {/* loading && <Spinner/>  (loading === true return SPinner otherwise null*/}
       {/* false zainicjowane w useState nie ma znaczenia, bo setLoading zmienia wartość loading w zaleności od potrzeby */}
       <ProductDrawer

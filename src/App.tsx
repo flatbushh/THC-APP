@@ -38,8 +38,8 @@ function App() {
                 <Route path="/no-access" element={<NoAccessPage />} />
 
                 {/* Protected Routes */}
-                <Route element={<ProtectedAdminRoutes />}>
-                  <Route element={<MainLayout />}>
+                <Route element={<MainLayout />}>
+                  <Route element={<ProtectedAdminRoutes />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="users" element={<Users />} />
                     <Route path="add-product" element={<ProductForm />} />
@@ -52,7 +52,7 @@ function App() {
             </BrowserRouter>
           </AuthProvider>
         </AlertProvider>
-        <ToastContainer />
+    
       </div>
     </div>
   );

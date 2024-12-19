@@ -51,8 +51,6 @@ later:
 sledzenie historii edycji produktu od jego stworzenia;
         */
 
-
-
 /* Praca domowa 21.11
 Mamy taki problem, ze jak odswiezamy strone to przestajemy byc zalogowani, 
 ale token dalej mamy w localStorage, czyli jestesmy zautoryzowani.
@@ -71,4 +69,29 @@ AC (acceptance criteria):
 Jako zalogowany user po odswiezeniu strony dalej jestem zalogowany.
 
 3. Podglad produktu i jego edycja (mozesz wykorzystac istniejacy podglad i dodac button: Edit dla Admina); DONE
+
+12.12
+ISSUES:
+
+1) user logout while refrshing the site
+2) changes submitted in productEdit are not being changed in the actual productlist or productpreview
+
+Praca domowa 12.12:
+1. Poprawic ProductEdit
+    - w konsoli leca bledy dotycace terpenu i genetics- nie moze ich byc ---> DONE
+    - dodatkowo terpen i genetics, pomimo tego, ze ustawiamy im default value to nie sa zaznaczone ---> DONE
+    - dodac przekierowanie -->  DONE
+    - wycentrowac Card --> DONE
+
+
+2. Poprawic nawigacje po calej stronie
+    - uzupelnic Drawer o brakujace linki (np dashboard) 
+
+--> nie rozumiem dlaczego potrzebujemy dashboard w drawerze skoro mam przyeick króty do niego przekierowuje w headerze, gdy admin jest xzalogowany 
+
+
+
+3. Przeleciec po aplikacji z otwarta konsola i popatrzec czy nigdzie nie leca warningi. Jak leca to je naprawic --> DONE
+
+
 */
