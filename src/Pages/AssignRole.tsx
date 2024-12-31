@@ -91,7 +91,15 @@ export const AssignRole = () => {
     }
   };
   return (
-    <Box sx={{ padding: 3, maxWidth: 500, margin: "auto" }}>
+    <Box
+      sx={{
+        display: "flex", // Set Box to a flex container
+        justifyContent: "center", // Center horizontally
+        alignItems: "center", // Center vertically
+        height: "100vh", // Take full viewport height
+        width: "100vw", // Take full viewport width
+      }}
+    >
       <Card sx={{ boxShadow: 3 }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>

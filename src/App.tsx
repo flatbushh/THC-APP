@@ -16,44 +16,44 @@ import { ProtectedAdminRoutes } from "./layouts/ProtectedRoutes";
 import { AuthProvider } from "./context/AuthContext";
 import { NoAccessPage } from "./Pages/NoAccessPage";
 import { ProductEdit } from "./Pages/ProductEdit";
+import { ProductDetails } from "./Pages/ProductDetails";
 
 function App() {
   return (
     <div className="App">
-      <div className="x">
-        {/*
+      {/*
         <BrowserRouter> okresla nam ze tutaj otwieramy router z paczki react-router-dom sluzacej do nawigacji
         <Routes> okresla nam ze wszystko co znajduje sie w srodku to nasze sciezki
         <Route> to sciezka- sklada z path (czyli adres w przegladarce, '/' oznacza, pusty route, taki defaultowy) oraz element- jaki element ma sie renderowac kiedy wejdziemyt pod ten adres
        */}
-        <AlertProvider>
-          <AuthProvider>
-            <BrowserRouter>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<ProductsList />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="product/:id" element={<ProductPreview />} />
-                <Route path="/no-access" element={<NoAccessPage />} />
+      <AlertProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public Routes */}
 
-                {/* Protected Routes */}
-                <Route element={<MainLayout />}>
-                  <Route element={<ProtectedAdminRoutes />}>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="users" element={<Users />} />
-                    <Route path="add-product" element={<ProductForm />} />
-                    <Route path="/assign-role/:id" element={<AssignRole />} />
-                    <Route path="/user-preview/:id" element={<UserPreview />} />
-                    <Route path="/edit-product/:id" element={<ProductEdit />} />
-                  </Route>
+              <Route path="/" element={<ProductsList />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="product/:id" element={<ProductPreview />} />
+              <Route path="/no-access" element={<NoAccessPage />} />
+              <Route path="/product-details" element={<ProductDetails />} />
+
+              {/* Protected Routes */}
+              <Route element={<MainLayout />}>
+                <Route element={<ProtectedAdminRoutes />}>
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="users" element={<Users />} />
+                  <Route path="add-product" element={<ProductForm />} />
+                  <Route path="/assign-role/:id" element={<AssignRole />} />
+                  <Route path="/user-preview/:id" element={<UserPreview />} />
+                  <Route path="/edit-product/:id" element={<ProductEdit />} />
                 </Route>
-              </Routes>
-            </BrowserRouter>
-          </AuthProvider>
-        </AlertProvider>
-    
-      </div>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </AlertProvider>
     </div>
   );
 }

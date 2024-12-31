@@ -9,6 +9,7 @@ import { ProductDrawer } from "../components/ProductDrawer";
 import { GeneticsEnum } from "../types/GeneticsEnum";
 import { Spinner } from "../components/Spinner";
 import React from "react";
+import { Drawer } from "../components/Drawer/Drawer";
 
 const CardContainer = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
@@ -211,6 +212,7 @@ export const ProductsList: FC = () => {
         products={products}
         setProducts={setProducts}
       />
+
       <CardContainer open={open}>
         {products.length < 1 && (
           <Box

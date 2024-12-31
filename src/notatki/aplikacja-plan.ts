@@ -82,16 +82,52 @@ Praca domowa 12.12:
     - dodatkowo terpen i genetics, pomimo tego, ze ustawiamy im default value to nie sa zaznaczone ---> DONE
     - dodac przekierowanie -->  DONE
     - wycentrowac Card --> DONE
-
-
 2. Poprawic nawigacje po calej stronie
     - uzupelnic Drawer o brakujace linki (np dashboard) 
 
---> nie rozumiem dlaczego potrzebujemy dashboard w drawerze skoro mam przyeick króty do niego przekierowuje w headerze, gdy admin jest xzalogowany 
-
-
-
 3. Przeleciec po aplikacji z otwarta konsola i popatrzec czy nigdzie nie leca warningi. Jak leca to je naprawic --> DONE
+
+
+
+
+
+
+
+
+PD:
+- przerzucić filtry DONE
+- Admin drawer na mierjsce filtrów 
+
+Zrobić nowy komponent ProductPreview od zera bez funkcjonalności: DONE
+- przycisk add to cart DONE
+- zakładka reviews (MuiTabs) DONE
+- zrobić details i reviews, zostawic puste (randomowy tekst), na zasadzie ze przelaczanie tabow dziala DONE
+- zamist wyboru rozmiaru dorzucic quantity DONE
+
+ISSUES 28.12:
+<ProductForm>
+    - teraz przy submicie pustyh pól nie dostaję warningów w selectach, ze zostały nieuzupełnione, działa dopiero jak kliknę w pole
+    - warningi z MUI w konsoli--> próbowalem ustawić defaultValues na pusty string ale nie pomaga (genetics: GeneticsEnum.INDICA || "")
+
+<Drawer> i <ProductDrawer>
+- moved FIlters to the right side ( Drawer icon jest przed innymi buttonami, a nie na samym koncu) DONE 
+-mam problem zpołączeniem dwoch Drawerów <Drawer> i <ProductDrawer> w jednym Appbarze (MainLayout?????)
+
+- image?
+
+
+*/
+
+
+
+
+/* Praca domowa 28.12
+1. Przerobic wszystkie inputy na FormTextfield i FormSelect
+2. Pousuwac zbedne Boxy, bo przenieslismy wszystko do Layoutu (sprawdz kazdy komponent, kazda strone)
+3. Zrob MUITheme
+    - https://mui.com/material-ui/customization/theming/?srsltid=AfmBOoo3iwMegC8Kq35kq8xcY39IOTn6mQCDgeY9LlfixTtekHSqVt3B
+    - https://www.dhiwise.com/post/exploring-mui-theming-options-customization-made-easy
+
 
 
 */

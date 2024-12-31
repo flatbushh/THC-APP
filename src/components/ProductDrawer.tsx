@@ -39,6 +39,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { geneticsFilters, terpenFilters } from "./checkboxFilterConfig";
 import { useAuthContext } from "../context/AuthContext";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const drawerWidth = 240;
 
@@ -95,7 +96,7 @@ const AppBar = styled(MuiAppBar, {
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
+    marginRight: `${drawerWidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -138,6 +139,7 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
 
   const navigate = useNavigate();
   const { user, logout } = useAuthContext();
+  const userRole = localStorage.getItem("userRole");
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -149,26 +151,11 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
         <Toolbar
           sx={{
             display: "flex", // Enable flexbox
-            justifyContent: "space-between", // Space between left and right items
+            justifyContent: "flex-end", // Space between left and right items
             alignItems: "center", // Center items vertically
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: "none" }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Filters
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", gap: 1, marginLeft: "auto" }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
             {/* Conditional rendering for Login and Register buttons */}
             {!localStorage.getItem("userId") &&
               !localStorage.getItem("token") && (
@@ -191,7 +178,7 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
               )}
 
             {/* Conditional rendering for Admin Dashboard button */}
-            {user?.role === "ADMIN" && ( //?. bo user moze byc null, wiec w ten sposob unikam bledu
+            {userRole === "ADMIN" && (
               <Button
                 variant="contained"
                 color="info"
@@ -213,6 +200,19 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
                 </Button>
               )}
           </Box>
+
+          {/* Move the drawer icon to the end of the toolbar */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="end"
+              sx={{ ml: 2 }}
+            >
+              <FilterAltIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -226,15 +226,15 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
           },
         }}
         variant="persistent"
-        anchor="left"
+        anchor="right"
         open={open}
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
               <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
             )}
           </IconButton>
         </DrawerHeader>

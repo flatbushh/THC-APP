@@ -6,27 +6,23 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   Divider,
-  Grid,
-  TextField,
   Typography,
   styled,
 } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TerpenEnum } from "../types/Terpen";
 import { GeneticsEnum } from "../types/GeneticsEnum";
 import { useToken } from "../hooks/useToken";
+import { FormTextfield } from "../components/FormComponents/FormTextField";
+import { FormSelect } from "../components/FormComponents/FormSelect";
 
 const productSchema = object({
   producentName: string().min(4).max(20).required("This field is required"),
   strainName: string().min(4).max(20).required("This field is required"),
-  genetics: string().min(4).max(15).required("This field is required"),
+  genetics: string().required("This field is required"),
   terpen: string().required("This field is required"),
   thcLevel: number()
     .positive()
@@ -51,14 +47,15 @@ type FormValues = {
   description: string;
 };
 
-const CustomCard = styled(Card)({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  borderRadius: "16px",
-  padding: 25,
-  flexWrap: "wrap",
-});
+const defaultValues: FormValues = {
+  producentName: "",
+  strainName: "",
+  genetics: "",
+  terpen: "",
+  thcLevel: 0,
+  cbdLevel: 0,
+  description: "",
+};
 
 export const ProductForm = () => {
   const navigate = useNavigate();
@@ -72,26 +69,13 @@ export const ProductForm = () => {
   const [geneticsOptions, setGeneticsOptions] = useState<
     { label: string; value: string }[]
   >([]);
-  const defaultValues: FormValues = {
-    producentName: "",
-    strainName: "",
-    genetics: GeneticsEnum.INDICA,
-    terpen: TerpenEnum.CARIOPHILEN,
-    thcLevel: 0,
-    cbdLevel: 0,
-    description: "",
-  };
-  const form = useForm<FormValues>({
+
+  const { handleSubmit, control } = useForm<FormValues>({
     resolver: yupResolver(productSchema),
     mode: "all",
     defaultValues,
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
   const mapTerpenEnumToOptions = () => {
     const array = Object.keys(TerpenEnum).map((terpen) => ({
       label: terpen.toLocaleUpperCase(),
@@ -128,8 +112,13 @@ export const ProductForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     await axios
-      .post("http://localhost:4000/create-product", data)
+      .post("http://localhost:4000/create-product", data, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
       .then(() => {
+        console.log("in");
         navigate("/");
         console.log(data);
       })
@@ -139,58 +128,55 @@ export const ProductForm = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-        width: "100%",
-      }}
-    >
-      <CustomCard>
-        <CardContent>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
+    <Card sx={{ width: "400px", borderRadius: "16px" }}>
+      <CardContent>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            width: "100%", // Make sure the form takes full width within the card
+            gap: "20px",
+          }}
+        >
+          <Typography
+            sx={{ fontFamily: "BlinkMacSystemFont" }}
+            variant="h4"
+            gutterBottom
           >
-            <Typography
-              sx={{ margin: "20px", fontFamily: "BlinkMacSystemFont" }}
-              variant="h4"
-              component="div"
-              gutterBottom
-            >
-              Add new product
-            </Typography>
+            Add new product
+          </Typography>
 
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
-              label={"Producent name"}
-              {...register("producentName")}
-              error={!!errors.producentName}
-              helperText={
-                errors.producentName ? errors.producentName.message : ""
-              }
-            />
+          <FormTextfield
+            label={"Producent name"}
+            control={control}
+            name={"producentName"}
+            fullWidth
+          />
 
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
-              label={"Strain name"}
-              {...register("strainName")}
-              error={!!errors.strainName}
-              helperText={errors.strainName ? errors.strainName.message : ""}
-            />
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
+          <FormTextfield
+            label={"Strain name"}
+            control={control}
+            name={"strainName"}
+            fullWidth
+          />
+
+          <FormSelect
+            label={"Genetics"}
+            control={control}
+            name={"genetics"}
+            options={geneticsOptions}
+            id="genetics"
+          />
+
+          {/* <TextField
+              sx={{ margin: "20px", width: "100%" }}
               select
               label={"Genetics"}
-              value={""}
               {...register("genetics")}
+              defaultValue={getValues('genetics')}
               error={!!errors.genetics}
               helperText={errors.genetics ? errors.genetics.message : ""}
             >
@@ -199,64 +185,58 @@ export const ProductForm = () => {
                   {option.label}
                 </MenuItem>
               ))}
-            </TextField>
+            </TextField> */}
 
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
+          <FormTextfield
+            label="THC"
+            control={control}
+            name={"thcLevel"}
+            fullWidth
+          />
+
+          {/* <TextField
+              sx={{ margin: "20px", width: "100%" }}
               label={"THC"}
               {...register("thcLevel")}
               error={!!errors.thcLevel}
               helperText={errors.thcLevel ? errors.thcLevel.message : ""}
-            />
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
-              label={"CBD"}
-              {...register("cbdLevel")}
-              error={!!errors.cbdLevel}
-              helperText={errors.cbdLevel ? errors.cbdLevel.message : ""}
-            />
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
-              select
-              fullWidth
-              label="Terpen"
-              value={""}
-              {...register("terpen")}
-              error={!!errors.terpen}
-              helperText={errors.terpen?.message}
+            /> */}
+
+          <FormTextfield
+            label="CBD"
+            control={control}
+            name="cbdLevel"
+            fullWidth
+          />
+          <FormSelect
+            label="Terpen"
+            control={control}
+            name="terpen"
+            options={terpenOptions}
+          />
+
+          <FormTextfield
+            label="Description"
+            control={control}
+            name="description"
+            fullWidth
+          />
+
+          <Divider sx={{ borderColor: "black", borderStyle: "solid" }} />
+          <Box display="flex" gap={2}>
+            <Button type="submit" variant="contained" color="success">
+              Add product
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => navigate("/")}
             >
-              {terpenOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              sx={{ margin: "20px", width: "90%" }}
-              fullWidth
-              label="Description"
-              {...register("description")}
-              error={!!errors.description}
-              helperText={errors.description?.message}
-            />
-
-            <Divider sx={{ borderColor: "black", borderStyle: "solid" }} />
-            <Box display="flex" gap={2}>
-              <Button type="submit" variant="contained" color="success">
-                Add product
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => navigate("/")}
-              >
-                Cancel
-              </Button>
-            </Box>
-          </form>
-        </CardContent>
-      </CustomCard>
-    </Box>
+              Cancel
+            </Button>
+          </Box>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
