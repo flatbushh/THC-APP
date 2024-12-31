@@ -32,7 +32,15 @@ export const UserPreview = () => {
     return <p>user not found</p>;
   }
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", padding: 3 }}>
+    <Box
+      sx={{
+        display: "flex", // Set Box to a flex container
+        justifyContent: "center", // Center horizontally
+        alignItems: "center", // Center vertically
+        height: "100vh", // Take full viewport height
+        width: "100vw", // Take full viewport width
+      }}
+    >
       {loading && <Spinner />}
 
       <Card sx={{ maxWidth: 500, width: "100%", padding: 2, boxShadow: 3 }}>

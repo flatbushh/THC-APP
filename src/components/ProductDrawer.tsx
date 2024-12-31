@@ -38,6 +38,8 @@ import { GeneticsEnum } from "../types/GeneticsEnum";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { geneticsFilters, terpenFilters } from "./checkboxFilterConfig";
+import { useAuthContext } from "../context/AuthContext";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const drawerWidth = 240;
 
@@ -94,7 +96,7 @@ const AppBar = styled(MuiAppBar, {
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
+    marginRight: `${drawerWidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -136,30 +138,82 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
   // };
 
   const navigate = useNavigate();
+  const { user, logout } = useAuthContext();
+  const userRole = localStorage.getItem("userRole");
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Filtry
-          </Typography>
+        <Toolbar
+          sx={{
+            display: "flex", // Enable flexbox
+            justifyContent: "flex-end", // Space between left and right items
+            alignItems: "center", // Center items vertically
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {/* Conditional rendering for Login and Register buttons */}
+            {!localStorage.getItem("userId") &&
+              !localStorage.getItem("token") && (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate("/login")}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => navigate("/register")}
+                  >
+                    Register
+                  </Button>
+                </>
+              )}
+
+            {/* Conditional rendering for Admin Dashboard button */}
+            {userRole === "ADMIN" && (
+              <Button
+                variant="contained"
+                color="info"
+                onClick={() => navigate("/dashboard")}
+              >
+                Admin Dashboard
+              </Button>
+            )}
+
+            {/* Conditional rendering for Logout button */}
+            {localStorage.getItem("userId") &&
+              localStorage.getItem("token") && (
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              )}
+          </Box>
+
+          {/* Move the drawer icon to the end of the toolbar */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="end"
+              sx={{ ml: 2 }}
+            >
+              <FilterAltIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
-        <Button variant="contained" onClick={() => navigate("/register")}>
-          Register
-        </Button>
-        <Button variant="contained" onClick={() => navigate("/login")}>
-          Login
-        </Button>
       </AppBar>
 
       <Drawer
@@ -172,20 +226,19 @@ export const ProductDrawer: FC<ProductDrawerType> = ({
           },
         }}
         variant="persistent"
-        anchor="left"
+        anchor="right"
         open={open}
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
               <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
             )}
           </IconButton>
         </DrawerHeader>
 
-        <Divider />
         <List>
           {FILTER_NAMES.map((filter, index) => (
             <ListItem key={index}>

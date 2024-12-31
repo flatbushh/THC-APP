@@ -9,6 +9,7 @@ import { ProductDrawer } from "../components/ProductDrawer";
 import { GeneticsEnum } from "../types/GeneticsEnum";
 import { Spinner } from "../components/Spinner";
 import React from "react";
+import { Drawer } from "../components/Drawer/Drawer";
 
 const CardContainer = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
@@ -198,7 +199,8 @@ export const ProductsList: FC = () => {
 
   return (
     <Container>
-      {loading ? <Spinner /> : null} {/* loading && <Spinner/>  (loading === true return SPinner otherwise null*/}
+      {loading && <Spinner />}
+      {/* loading && <Spinner/>  (loading === true return SPinner otherwise null*/}
       {/* false zainicjowane w useState nie ma znaczenia, bo setLoading zmienia wartość loading w zaleności od potrzeby */}
       <ProductDrawer
         open={open}
@@ -207,9 +209,10 @@ export const ProductsList: FC = () => {
         selectedGenetics={filters.genetics}
         selectedTerpen={filters.terpen}
         filterElements={filterElements}
-        products = {products}
-        setProducts = {setProducts}
+        products={products}
+        setProducts={setProducts}
       />
+
       <CardContainer open={open}>
         {products.length < 1 && (
           <Box

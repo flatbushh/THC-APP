@@ -1,37 +1,33 @@
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import { Drawer as MuiDrawer } from "@mui/material/";
-import CssBaseline from "@mui/material/CssBaseline";
+import { Drawer as MuiDrawer, Typography } from "@mui/material/";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { PropsWithChildren, useState } from "react";
 import { MenuList } from "./MenuList";
 
 const DRAWER_WIDTH = 240;
+const APP_BAR_HEIGHT = 64;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
+const Main = styled(Box, { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
 }>(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: `calc(100vh - ${APP_BAR_HEIGHT})`,
+  paddingTop: APP_BAR_HEIGHT,
   flexGrow: 1,
-  padding: theme.spacing(3),
-  paddingTop: 64,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${DRAWER_WIDTH}px`,
   variants: [
     {
       props: ({ open }: { open: boolean }) => open,
@@ -40,7 +36,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
           easing: theme.transitions.easing.easeOut,
           duration: theme.transitions.duration.enteringScreen,
         }),
-        marginLeft: 0,
+        marginLeft: DRAWER_WIDTH,
+        width: `calc(100% - ${DRAWER_WIDTH})`,
       },
     },
   ],
@@ -94,9 +91,15 @@ export const Drawer = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
+      <AppBar open={open} position="fixed" sx={{ height: APP_BAR_HEIGHT }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -106,12 +109,16 @@ export const Drawer = ({ children }: PropsWithChildren) => {
             sx={[
               {
                 mr: 2,
+                position: "static",
               },
               open && { display: "none" },
             ]}
           >
             <MenuIcon />
           </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Options
+          </Typography>
         </Toolbar>
       </AppBar>
       <MuiDrawer

@@ -50,22 +50,18 @@ export const ProductCard: FC<{ product: Product }> = ({
 
         <CardContent>
           <Typography gutterBottom variant="h5">
-            {" "}
-            {strainName}{" "}
+            {strainName}
           </Typography>
           <Typography gutterBottom variant="h6">
-            {" "}
             {`${producentName.charAt(0).toUpperCase()}${producentName.slice(
               1
-            )}`}{" "}
+            )}`}
           </Typography>
           <Typography gutterBottom variant="h6">
-            {" "}
-            {`${genetics.charAt(0).toUpperCase()}${genetics.slice(1)}`}{" "}
+            {`${genetics.charAt(0).toUpperCase()}${genetics.slice(1)}`}
           </Typography>
           <Typography gutterBottom variant="h6">
-            {" "}
-            THC {thcLevel} CBD {cbdLevel}{" "}
+            THC {thcLevel} CBD {cbdLevel}
           </Typography>
 
           <div className="terpeny">

@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  FC,
-  PropsWithChildren,
-} from "react";
+import { createContext, useContext, PropsWithChildren } from "react";
 import { Slide, toast, ToastOptions } from "react-toastify";
 
 interface AlertContextType {
@@ -28,7 +21,7 @@ const defaultToastOptions: ToastOptions = {
   transition: Slide,
 };
 
-// to jest funkcja Provider - dostarcza nam context(patrz dalej w App.tsx)
+// to jest funkcja Provider - dostarcza nam context(dalej w App.tsx)
 // sam context jest wrapperem(kontenerem) dla wielu lub jednego dziecka
 export const AlertProvider = ({ children }: PropsWithChildren) => {
   const showSuccessAlert = (message: string) => {

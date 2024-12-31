@@ -73,6 +73,12 @@ export const AssignRole = () => {
       showErrorAlert("User not found!");
       return;
     }
+    if (selectedUser.role === role) {
+      showErrorAlert(
+        "The selected role has already been assigned to this user!"
+      );
+      return;
+    }
 
     try {
       await axios.post(`http://localhost:4000/assign-role/${selectedUser.id}`, {
@@ -85,7 +91,15 @@ export const AssignRole = () => {
     }
   };
   return (
-    <Box sx={{ padding: 3, maxWidth: 500, margin: "auto" }}>
+    <Box
+      sx={{
+        display: "flex", // Set Box to a flex container
+        justifyContent: "center", // Center horizontally
+        alignItems: "center", // Center vertically
+        height: "100vh", // Take full viewport height
+        width: "100vw", // Take full viewport width
+      }}
+    >
       <Card sx={{ boxShadow: 3 }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>
@@ -100,6 +114,7 @@ export const AssignRole = () => {
               select
               fullWidth
               label="Select User"
+              value={""}
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email ? errors.email.message : ""}
@@ -118,6 +133,7 @@ export const AssignRole = () => {
               select
               fullWidth
               label="Select Role"
+              value={""}
               {...register("role")}
               error={!!errors.role}
               helperText={errors.role ? errors.role.message : ""}
