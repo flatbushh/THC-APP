@@ -1,0 +1,56 @@
+body {
+  font-family: 'Nunito', sans-serif;
+	margin: 0;
+  padding: 0;
+}
+
+.x {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.producent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.genetics {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black
+}
+
+
+.terpens {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black
+}
+
+.THC {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black
+}
+
+.terpeny {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.card {
+  background-color: red;
+  border: 2px solid black;
+}
+/*czemu nie zmienia sie ?????*/
