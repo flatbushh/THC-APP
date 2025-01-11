@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 1. Musimy przesunac AddProduct do ekranu po zalogowaniu DONE bez JWT
@@ -134,4 +134,20 @@ ISSUES 28.12:
 2. Zrobic palette kolorow z dark i light modem DONE
     - https://mui.com/material-ui/customization/dark-mode/?srsltid=AfmBOorSMynhBLTUpBxL-fj6iaLYzWiL5mx_rpIGhMGnjl5qFQRceCsH
 3. Leciec dalej z ProductDetails
+*/
+
+
+/* Praca domowa 11.01
+1. Zrobic palette kolorow pelna w tych plikach, ktore zrobilismy (darkPalette i lightPalette)
+    - przeleciec cala aplikacje i ogarnac tak, zeby wszystko uzywalo theme (usunac jakies <p> i zmienic je na Typography, usunac zbedne tla itp;)
+2. Ogarnac Layouty. 
+    - obecnie mamy jakies dwa dziwne Layouty, ktore niewiadomo skad sie biora.
+    jak powinno byc:
+    - powinnismy miec APPBAR zawsze na gorze: powinny tam byc tylko- login, register, theme switch
+    - przycisk do otwarcia Drawera dla ADMINA (po lewej): 
+        - powinien byc renderowany conditionalnie na podstawie wartosci z localStorage
+    - przycisk do otwarcia filtrow produktow powinien znajdowac sie na stronie Products;
+3. Kontunowac z ProductDetails wedlug designu.
+    - na razie bez funkcjonalnosci, puste przyciski 
+    - bez pobierania produktu z backendu (mock wartosci)
 */
